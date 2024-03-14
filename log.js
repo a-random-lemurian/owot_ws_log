@@ -3,6 +3,7 @@ const sqlite3 = require('sqlite3');
 const crypto = require('crypto');
 const filename = 'main.db';
 const db = new sqlite3.Database(filename);
+const fs = require('fs')
 
 const cfg = require('./config.json');
 
@@ -29,6 +30,61 @@ function reassignGlobalChatReceiver() {
   bots[newGlobalReceiver].connData.allowGlobal = true;
   worldReceivingGlobal = newGlobalReceiver;
   console.log(`Redesignated connection to '${world}' as receiver of global chat`);
+}
+
+function fileSizeInBytes(filename) {
+  return fs.statSync(filename)["size"];
+}
+
+let cmd = {
+  size(connData, m) {
+    let response = `total size: ${fileSizeInBytes(filename) / 1000000.0} MB`;
+    db.all("select count(*) from msg", (err, rows) => {
+      response += ` | ${rows[0]['count(*)']} messages`;
+      connData.bot.chat.send(response, (m["location"]=="global"));
+    });
+  }
+}
+
+let canSendDenyMessage = true;
+
+function denyMessage(connData, m) {
+  if (!canSendDenyMessage) {
+    return;
+  }
+  canSendDenyMessage = false;
+  setTimeout(() => { canSendDenyMessage = true }, 8000);
+  
+  let messages = {
+    "ultraleland7Ziggy": "Ziggy, fuck right off. Stop telling me what to do! Only Lemuria can!"
+  };
+
+  connData.bot.chat.send(
+    messages[m.realUsername] ||
+    "You shall not pass, nor shall you run this command!",
+    (m["location"] == "global")
+  );
+}
+
+function processCmds(connData, m) {
+  /*
+   * TODO: figure out what's causing
+   * cfg.trustedUsers.includes(m["realusername"])
+   * to go weird and deny everyone from running
+   * chatbot commands, even lemuria
+   * 
+   * hardcoded for now because i'm the only
+   * person the chatbot will ever trust for
+   * a long, long while.
+   */
+  if (m["realUsername"] == "lemuria") {
+    if (m["message"] == `ch size`) {
+      cmd.size(connData, m);
+    }
+  } else {
+    denyMessage(connData, m)
+  }
+  return;
 }
 
 function initWorldConn(world) {
