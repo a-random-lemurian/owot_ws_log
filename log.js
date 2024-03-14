@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const filename = 'main.db';
 const db = new sqlite3.Database(filename);
 
-const cfg = require('./config.json')
+const cfg = require('./config.json');
 
 let incrementalConnId = 1;
 let worldReceivingGlobal = null;
