@@ -1,0 +1,8 @@
+*.log
+*.db
+*.db*
+*.log*
+ignore_me
+node_modules
+config.json
+!config.json.example
