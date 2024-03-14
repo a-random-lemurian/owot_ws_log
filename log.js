@@ -7,6 +7,8 @@ const db = new sqlite3.Database(filename);
 const cfg = require('./config.json')
 
 let incrementalConnId = 1;
+let worldReceivingGlobal = null;
+
 var bots = {};
 
 function log_message(json, world) {
@@ -20,8 +22,23 @@ function log_message(json, world) {
     [JSON.stringify(JSON.parse(json)), JSON.stringify(metadata), world]);
 }
 
-function initWorldConn(world, allowGlobal)
-{
+function reassignGlobalChatReceiver() {
+  console.log(`Redesignating global chat receiver`)
+  worldReceivingGlobal = null;
+  let newGlobalReceiver = bots[Math.ceil(Math.random() * Object.keys(bots).length)];
+  bots[newGlobalReceiver].connData.allowGlobal = true;
+  worldReceivingGlobal = newGlobalReceiver;
+  console.log(`Redesignated connection to '${world}' as receiver of global chat`);
+}
+
+function initWorldConn(world) {
+  let allowGlobal = false;
+  if (!worldReceivingGlobal && world != '') {
+    console.log(`Designated connection to '${world}' as receiver of global chat`);
+    worldReceivingGlobal = world;
+    allowGlobal = true;
+  }
+
   let connData = {
     bot: new OWOTjs.Client({ "world": world, hide: true }),
     world: world,
@@ -34,7 +51,7 @@ function initWorldConn(world, allowGlobal)
     }
   };
   incrementalConnId++;
-  
+
   connData.bot.on("join", () => {
     console.log(`chat logger started - world \'${world}\' - so far ${connData.id} connections`);
   });
@@ -51,6 +68,11 @@ function initWorldConn(world, allowGlobal)
   });
 
   connData.bot.on("close", () => {
+    if (connData.allowGlobal) {
+      console.log(`connection to '${world}' lost, it was designated receiver of global chat`);
+      reassignGlobalChatReceiver();
+    }
+
     console.log(`reconnecting to ${world}`);
     console.log(`summary of conn: ${connData}`)
     initWorldConn(world);
@@ -61,12 +83,12 @@ function initWorldConn(world, allowGlobal)
 }
 
 cfg.worlds.forEach(world => {
-  let = shouldReceiveGlobal = false;
+  let shouldReceiveGlobal = false;
   if (cfg.globalChatPolicy == "frontPageOnly" && world == '') {
     shouldReceiveGlobal = true;
   }
 
-  initWorldConn(world, shouldReceiveGlobal);
+  initWorldConn(world);
 })
 
 console.log(`joined all the worlds`)
