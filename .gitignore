@@ -2,6 +2,7 @@
 *.db
 *.db*
 *.log*
+logs
 ignore_me
 node_modules
 config.json
