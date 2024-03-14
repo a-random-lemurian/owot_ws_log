@@ -1,5 +1,8 @@
 {
-    "worlds": [""],
-    "globalChatPolicy": "frontPageOnly",
-    "trustedUsers": ["FP"],
+    "worlds": [
+        ""
+    ],
+    "trustedUsers": [
+        "FP"
+    ]
 }

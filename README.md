@@ -29,9 +29,6 @@ node log.js > $(date --iso-8601)
 ```
 
 * `worlds` - Worlds to log
-* `globalChatPolicy` - Recommended to set it to `frontPageOnly` otherwise you
-  will receive multiple copies of global chat messages. This will amplify the
-  power of a Starianna attack and you do not want that.
 * `trustedUsers` - Users who are allowed to run commands that control or
   query the bot's current status.
 
