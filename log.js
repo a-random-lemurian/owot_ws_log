@@ -56,10 +56,6 @@ function initWorldConn(world, allowGlobal)
     initWorldConn(world);
   })
 
-  setTimeout(() => {
-    connData.bot.net.ws.close();
-  }, 10000)
-
   console.log(`Joined '${world}'`);
   bots[world] = connData;
 }
