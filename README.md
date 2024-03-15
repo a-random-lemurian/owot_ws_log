@@ -12,11 +12,13 @@ Before running for the first time:
 ```
 mkdir logs
 sqlite3 main.db '.read schema.sql'
+sqlite3 debug.db '.read schema.sql'
 ```
 
 Run:
 ```
-node log.js > $(date --iso-8601)
+NODE_ENV=production node log.js > logs/$(date --iso-8601)  # production
+NODE_ENV=debug node log.js > logs/$(date --iso-8601)
 ```
 
 ## Configure
