@@ -11,6 +11,31 @@ const denials = require('./denials.json');
 let incrementalConnId = 1;
 let worldReceivingGlobal = null;
 
+/**
+* @typedef {object} ChatsLoggedStats
+* @property {number} page:
+* @property {number} global
+*/
+
+/**
+ * @typedef {object} OWOTMessage
+ * @property {kind} {string}
+ * @property {nickname} {string}
+ * @property {realUsername} {string}
+ * @property {id} {number}
+ * @property {message} {string}
+ * @property {registered} {boolean}
+ * @property {location} {string}
+ * @property {op} {boolean}
+ * @property {admin} {boolean}
+ * @property {staff} {boolean}
+ * @property {color} {string},
+ * @property {date} {number}
+ */
+
+/**
+ * @type {Array<{bot: OWOTjs.Client, world: string, id: number, allowGlobal: boolean, connStart: Date, chatsLogged: ChatsLoggedStats}>}
+ */
 var bots = {};
 
 function log_message(connData, json, world) {
@@ -38,6 +63,7 @@ function fileSizeInBytes(filename) {
   return fs.statSync(filename)["size"];
 }
 
+/** @namespace */
 let cmd = {
   size(connData, m) {
     let response = ``;
