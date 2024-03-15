@@ -52,6 +52,10 @@ let cmd = {
   }
 }
 
+function isValidCmd(m) {
+  return Object.keys(cmd).includes(m["message"].split(" ")[1]);
+}
+
 let canSendDenyMessage = true;
 
 function denyMessage(connData, m) {
@@ -94,6 +98,9 @@ function processCmds(connData, m) {
    * person the chatbot will ever trust for
    * a long, long while.
    */
+  if (!isValidCmd(m)) {
+    return;
+  }
   if (m["realUsername"] == "lemuria") {
     if (m["message"] == `ch size`) {
       cmd.size(connData, m);
