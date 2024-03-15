@@ -123,20 +123,10 @@ function denyMessage(connData, m) {
 }
 
 function processCmds(connData, m) {
-  /*
-   * TODO: figure out what's causing
-   * cfg.trustedUsers.includes(m["realusername"])
-   * to go weird and deny everyone from running
-   * chatbot commands, even lemuria
-   * 
-   * hardcoded for now because i'm the only
-   * person the chatbot will ever trust for
-   * a long, long while.
-   */
   if (!isValidCmd(m)) {
     return;
   }
-  if (m["realUsername"] == "lemuria") {
+  if (cfg.trustedUsers.includes(m["realUsername"])) {
     if (m["message"] == `ch size`) {
       cmd.size(connData, m);
     }
