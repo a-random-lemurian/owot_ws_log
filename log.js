@@ -48,8 +48,7 @@ let worldReceivingGlobal = null;
  */
 var bots = {};
 
-function isSelfMessage(connData, m)
-{
+function isSelfMessage(connData, m) {
   return m["id"] == connData.bot.player.id;
 }
 
