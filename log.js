@@ -93,18 +93,6 @@ function isValidCmd(m) {
   return Object.keys(cmd).includes(m["message"].split(" ")[1]);
 }
 
-function createDenialMessage(m) {
-  let denial = ``;
-  if (m["privateMessage"] == "to_me") {
-    denial += `/tell ${m["id"]} `;
-  }
-
-  if (messages[m["realUsername"]]) {
-    return denial + denials.byUsername[m["realUsername"]];
-  } 
-  return denial + denials.generic[Math.ceil(Math.random() * denials.length)];
-}
-
 let canSendDenyMessage = true;
 
 function denyMessage(connData, m) {
@@ -117,6 +105,18 @@ function denyMessage(connData, m) {
   connData.bot.chat.send(
     createDenialMessage(m), (m["location"] == "global")
   );
+}
+
+function createDenialMessage(m) {
+  let denial = ``;
+  if (m["privateMessage"] == "to_me") {
+    denial += `/tell ${m["id"]} `;
+  }
+
+  if (messages[m["realUsername"]]) {
+    return denial + denials.byUsername[m["realUsername"]];
+  } 
+  return denial + denials.generic[Math.ceil(Math.random() * denials.length)];
 }
 
 function processCmds(connData, m) {
