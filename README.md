@@ -37,3 +37,13 @@ Not implemented yet.
 
 `ch msgcount` - total amount of messages in DB
 `ch size` - total size of SQLite database file
+
+## Etymology
+
+Why is it called `owot_ws_log`?
+
+This bot is the successor to an older logging bot, which relied on using a
+userscript to "feed" messages to a rest API that fed in JSON, back when I
+had no understanding of how OWOT websockets worked. The term `owot_ws_log`
+was originally meant to reflect the fact that it logged the websocket directly
+instead of relying on userscripts sending data.
