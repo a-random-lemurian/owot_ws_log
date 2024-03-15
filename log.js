@@ -38,12 +38,17 @@ let worldReceivingGlobal = null;
  */
 var bots = {};
 
+function isSelfMessage(connData, m)
+{
+  return m["id"] == connData.bot.player.id;
+}
+
 function log_message(connData, json, world) {
   metadata = {
     msg_json_sha256: crypto.createHash('sha256')
       .update(json)
       .digest('base64'),
-    sent_by_bot: json["id"] == connData.bot.player.id
+    sent_by_bot: isSelfMessage(connData, json)
   }
 
   db.run(`INSERT INTO msg (msg_json, metadata_json, world) VALUES(?,?,?)`,
@@ -172,7 +177,7 @@ function initWorldConn(world) {
       processCmds(connData, m);
     }
 
-    console.log(`${world} ${JSON.stringify(m)}`);
+    console.log(`${world} ${isSelfMessage(connData, m) ? '- SELF -' : ''} ${JSON.stringify(m)}`);
     log_message(connData, JSON.stringify(m), '');
   });
 
