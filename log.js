@@ -42,6 +42,9 @@ console.log(`using ${filename}`);
  */
 var bots = {};
 
+let incrementalConnId = 1;
+let worldReceivingGlobal = null;
+
 function isSelfMessage(connData, m) {
   return m["id"] == connData.bot.player.id;
 }
