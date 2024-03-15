@@ -12,11 +12,12 @@ let worldReceivingGlobal = null;
 
 var bots = {};
 
-function log_message(json, world) {
+function log_message(connData, json, world) {
   metadata = {
     msg_json_sha256: crypto.createHash('sha256')
       .update(json)
-      .digest('base64')
+      .digest('base64'),
+    sent_by_bot: json["id"] == connData.bot.player.id
   }
 
   db.run(`INSERT INTO msg (msg_json, metadata_json, world) VALUES(?,?,?)`,
@@ -120,7 +121,7 @@ function initWorldConn(world) {
     }
 
     console.log(`${world} ${JSON.stringify(m)}`);
-    log_message(JSON.stringify(m), '');
+    log_message(connData, JSON.stringify(m), '');
   });
 
   connData.bot.on("close", () => {
