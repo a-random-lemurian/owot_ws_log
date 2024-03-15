@@ -33,10 +33,8 @@ node log.js > $(date --iso-8601)
   query the bot's current status.
 
 ## Commands
-Not implemented yet.
 
-`ch msgcount` - total amount of messages in DB
-`ch size` - total size of SQLite database file
+* `ch size` - total size of SQLite database file
 
 ## Etymology
 
