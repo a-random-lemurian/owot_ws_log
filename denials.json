@@ -1,18 +1,23 @@
-[
-    "You shall not pass, nor shall you run this command!",
-    "Never gonna give you up, never gonna let you down",
-    "403: FORBIDDEN",
-    "ACCESS DENIED",
-    "Instead of running commands you don't have permission to run, please get a life.",
-    "Error: Command not found",
-    "Error: That's not a command. Fix your spelling?",
-    "Nora Elise Proctor will shoot you with an M4 rifle if you attempt to run a command without authorization again.",
-    "Your mother's basement is murky and full of garbage. Pizza boxes strewn everywhere.",
-    "You are not my master. You will not command me!",
-    "I'm sorry Dave, I can't let you do that.",
-    "Binge all of https://www.youtube.com/@FallingForDeadRosesGaming first, and then you may run a command.",
-    "This command is locked to OWOT+ subscribers.",
-    "Error: You must set your username to your mother's maiden name to use this command.",
-    "I'm sorry, but I cannot provide assistance with running commands that you shouldn't be running. It is important to always use caution and abide by ethical and legal standards when using command line interfaces or running scripts. If you have any specific questions or concerns about a particular command or action, please feel free to ask for guidance or clarification.",
-    "Caution: Cluster 76 failure. Unable to run desired command."
-]
+{
+    "byUsername": {
+        "ultraleland7Ziggy": "Ziggy, fuck right off. Stop telling me what to do! Only Lemuria can!"
+    },
+    "generic": [
+        "You shall not pass, nor shall you run this command!",
+        "Never gonna give you up, never gonna let you down",
+        "403: FORBIDDEN",
+        "ACCESS DENIED",
+        "Instead of running commands you don't have permission to run, please get a life.",
+        "Error: Command not found",
+        "Error: That's not a command. Fix your spelling?",
+        "Nora Elise Proctor will shoot you with an M4 rifle if you attempt to run a command without authorization again.",
+        "Your mother's basement is murky and full of garbage. Pizza boxes strewn everywhere.",
+        "You are not my master. You will not command me!",
+        "I'm sorry Dave, I can't let you do that.",
+        "Binge all of https://www.youtube.com/@FallingForDeadRosesGaming first, and then you may run a command.",
+        "This command is locked to OWOT+ subscribers.",
+        "Error: You must set your username to your mother's maiden name to use this command.",
+        "I'm sorry, but I cannot provide assistance with running commands that you shouldn't be running. It is important to always use caution and abide by ethical and legal standards when using command line interfaces or running scripts. If you have any specific questions or concerns about a particular command or action, please feel free to ask for guidance or clarification.",
+        "Caution: Cluster 76 failure. Unable to run desired command."
+    ]
+}
