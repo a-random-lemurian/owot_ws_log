@@ -96,6 +96,18 @@ function isValidCmd(m) {
   return Object.keys(cmd).includes(m["message"].split(" ")[1]);
 }
 
+function createDenialMessage(m) {
+  let denial = ``;
+  if (m["privateMessage"] == "to_me") {
+    denial += `/tell ${m["id"]} `;
+  }
+
+  if (messages[m["realUsername"]]) {
+    return denial + denials.byUsername[m["realUsername"]];
+  } 
+  return denial + denials.generic[Math.ceil(Math.random() * denials.length)];
+}
+
 let canSendDenyMessage = true;
 
 function denyMessage(connData, m) {
@@ -104,26 +116,9 @@ function denyMessage(connData, m) {
   }
   canSendDenyMessage = false;
   setTimeout(() => { canSendDenyMessage = true }, 8000);
-  
-  let messages = {
-    "ultraleland7Ziggy": "Ziggy, fuck right off. Stop telling me what to do! Only Lemuria can!"
-  };
-
-  let denial = ``;
-
-  if (m["privateMessage"] == "to_me") {
-    denial += `/tell ${m["id"]} `;
-  }
-
-  if (messages[m["realUsername"]]) {
-    denial += messages[m["realUsername"]];
-  } else {
-    denial += denials[Math.ceil(Math.random() * denials.length)];
-  }
 
   connData.bot.chat.send(
-    denial,
-    (m["location"] == "global")
+    createDenialMessage(m), (m["location"] == "global")
   );
 }
 
