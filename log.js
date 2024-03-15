@@ -6,6 +6,7 @@ const db = new sqlite3.Database(filename);
 const fs = require('fs')
 
 const cfg = require('./config.json');
+const denials = require('./denials.json');
 
 let incrementalConnId = 1;
 let worldReceivingGlobal = null;
@@ -39,7 +40,11 @@ function fileSizeInBytes(filename) {
 
 let cmd = {
   size(connData, m) {
-    let response = `total size: ${fileSizeInBytes(filename) / 1000000.0} MB`;
+    let response = ``;
+    if (m["privateMessage"] == "to_me") {
+      response += `/tell ${m["id"]}`;
+    }
+    response += `total size: ${fileSizeInBytes(filename) / 1000000.0} MB`;
     db.all("select count(*) from msg", (err, rows) => {
       response += ` | ${rows[0]['count(*)']} messages`;
       connData.bot.chat.send(response, (m["location"]=="global"));
@@ -59,6 +64,15 @@ function denyMessage(connData, m) {
   let messages = {
     "ultraleland7Ziggy": "Ziggy, fuck right off. Stop telling me what to do! Only Lemuria can!"
   };
+
+  let denial = ``;
+
+  if (m["privateMessage"] == "to_me") {
+    denial += `/tell ${m["id"]} `;
+  }
+
+  if (messages[m["realUsername"]]) {
+    denial += messages[m["realUsername"]];
   } else {
     denial += denials[Math.ceil(Math.random() * denials.length)];
   }
@@ -120,6 +134,9 @@ function initWorldConn(world) {
 
     if (m["location"] == "global" && connData.allowGlobal == false) {
       return;
+    }
+    if (m["message"].startsWith(`ch `)) {
+      processCmds(connData, m);
     }
 
     console.log(`${world} ${JSON.stringify(m)}`);
