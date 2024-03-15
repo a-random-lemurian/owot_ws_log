@@ -59,10 +59,12 @@ function denyMessage(connData, m) {
   let messages = {
     "ultraleland7Ziggy": "Ziggy, fuck right off. Stop telling me what to do! Only Lemuria can!"
   };
+  } else {
+    denial += denials[Math.ceil(Math.random() * denials.length)];
+  }
 
   connData.bot.chat.send(
-    messages[m.realUsername] ||
-    "You shall not pass, nor shall you run this command!",
+    denial,
     (m["location"] == "global")
   );
 }
