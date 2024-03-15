@@ -1,25 +1,19 @@
-const cfg = require('./config.json');
-require("dotenv").config();
-const DEBUG = (cfg.debug || process.env.NODE_ENV != "production");
-
-if (DEBUG) {
-  console.log('Debug mode');
-}
-
 const OWOTjs = require('owot-js');
 const sqlite3 = require('sqlite3');
 const crypto = require('crypto');
-
-const filename = cfg.debug ? 'main.db' : 'debug.db';
-const db = new sqlite3.Database(filename);
-console.log(`using ${filename}`);
-
 const fs = require('fs')
 
 const denials = require('./denials.json');
 
-let incrementalConnId = 1;
-let worldReceivingGlobal = null;
+const cfg = require('./config.json');
+require("dotenv").config();
+const DEBUG = (cfg.debug || process.env.NODE_ENV != "production");
+if (DEBUG) {
+  console.log('Debug mode');
+}
+const filename = cfg.debug ? 'debug.db' : 'main.db';
+const db = new sqlite3.Database(filename);
+console.log(`using ${filename}`);
 
 /**
 * @typedef {object} ChatsLoggedStats
