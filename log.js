@@ -74,6 +74,27 @@ function fileSizeInBytes(filename) {
   return fs.statSync(filename)["size"];
 }
 
+let messageCount = 0;
+let messageCountCheckDate = new Date();
+
+/*
+ * Cache the message count by incrementing it every time the bot gets a
+ * message, so we only have to do an expensive database operation once
+ * in a while. Cache lives for 20 minutes.
+ */
+
+function getMessageCount(callback) {
+  if ((new Date() - messageCountCheckDate) > 20 * 60 * 1000) {
+    db.all("select count(*) from msg", (err, rows) => {
+      messageCount = rows[0]['count(*)'];
+      messageCountCheckDate = new Date();
+      callback(rows[0]['count(*)']);
+    });
+  } else {
+    callback(messageCount);
+  }
+}
+
 /** @namespace */
 let cmd = {
   size(connData, m) {
@@ -82,10 +103,10 @@ let cmd = {
       response += `/tell ${m["id"]}`;
     }
     response += `total size: ${fileSizeInBytes(filename) / 1000000.0} MB`;
-    db.all("select count(*) from msg", (err, rows) => {
-      response += ` | ${rows[0]['count(*)']} messages`;
+    getMessageCount((count) => {
+      response += ` | ${count} messages`;
       connData.bot.chat.send(response, (m["location"]=="global"));
-    });
+    })
   }
 }
 
@@ -164,6 +185,7 @@ function initWorldConn(world) {
 
   connData.bot.on("chat", (m) => {
     connData.chatsLogged[m["location"]]++;
+    messageCount++;
 
     if (m["location"] == "global" && connData.allowGlobal == false) {
       return;
