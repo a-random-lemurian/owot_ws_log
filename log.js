@@ -113,10 +113,14 @@ function createDenialMessage(m) {
     denial += `/tell ${m["id"]} `;
   }
 
-  if (messages[m["realUsername"]]) {
-    return denial + denials.byUsername[m["realUsername"]];
-  } 
-  return denial + denials.generic[Math.ceil(Math.random() * denials.length)];
+  console.log(m, denials, m["realUsername"] in denials.byUsername)
+
+  if (m["realUsername"] != '' && m["realUsername"] in denials.byUsername) {
+    denial += denials.byUsername[m["realUsername"]];
+  } else {
+    denial += denials.generic[Math.ceil(Math.random() * denials.generic.length)];
+  }
+  return denial;
 }
 
 function processCmds(connData, m) {
