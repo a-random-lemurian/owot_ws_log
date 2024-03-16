@@ -74,20 +74,22 @@ function fileSizeInBytes(filename) {
   return fs.statSync(filename)["size"];
 }
 
-let messageCount = 0;
-let messageCountCheckDate = new Date();
-
 /*
  * Cache the message count by incrementing it every time the bot gets a
  * message, so we only have to do an expensive database operation once
  * in a while. Cache lives for 20 minutes.
  */
 
+let messageCount = 0;
+let messageCountChecked = false;
+let messageCountCheckDate = new Date();
+
 function getMessageCount(callback) {
-  if ((new Date() - messageCountCheckDate) > 20 * 60 * 1000) {
+  if ((new Date() - messageCountCheckDate) > 20 * 60 * 1000 || !messageCountChecked) {
     db.all("select count(*) from msg", (err, rows) => {
       messageCount = rows[0]['count(*)'];
       messageCountCheckDate = new Date();
+      messageCountChecked = true;
       callback(rows[0]['count(*)']);
     });
   } else {
