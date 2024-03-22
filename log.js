@@ -121,7 +121,8 @@ function denyMessage(connData, m) {
     return;
   }
   canSendDenyMessage = false;
-  setTimeout(() => { canSendDenyMessage = true }, 8000);
+  setTimeout(() => { canSendDenyMessage = true },
+    cfg.denialMessageRateLimitSeconds || 8 * 1000);
 
   connData.bot.chat.send(
     createDenialMessage(m), (m["location"] == "global")
