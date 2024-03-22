@@ -185,11 +185,13 @@ function initWorldConn(world) {
 
   connData.bot.on("chat", (m) => {
     connData.chatsLogged[m["location"]]++;
-    messageCount++;
 
     if (m["location"] == "global" && connData.allowGlobal == false) {
       return;
     }
+
+    messageCount++;
+
     if (m["message"].startsWith(`ch `)) {
       processCmds(connData, m);
     }
