@@ -11,7 +11,7 @@ const DEBUG = (cfg.debug || process.env.NODE_ENV != "production");
 if (DEBUG) {
   console.log('Debug mode');
 }
-const filename = cfg.debug ? 'debug.db' : 'main.db';
+const filename = DEBUG ? 'debug.db' : 'main.db';
 const db = new sqlite3.Database(filename);
 console.log(`using ${filename}`);
 
