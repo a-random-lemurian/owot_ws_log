@@ -99,7 +99,7 @@ function getMessageCount(callback) {
 let cmd = {
   size(connData, m) {
     let response = ``;
-    if (m["privateMessage"] == "to_me") {
+    if (m["privateMessage"] == "to_me" || isFrontPage(connData, m)) {
       response += `/tell ${m["id"]}`;
     }
     response += `total size: ${fileSizeInBytes(filename) / 1000000.0} MB`;
@@ -114,18 +114,32 @@ function isValidCmd(m) {
   return Object.keys(cmd).includes(m["message"].split(" ")[1]);
 }
 
+function isFrontPage(connData, m) {
+  return (connData.world == '' && m["location"] == "page")
+}
+
 let canSendDenyMessage = true;
 
 function denyMessage(connData, m) {
   if (!canSendDenyMessage) {
     return;
   }
+
+  /*
+   * Send denial messages through PMs on the front page because
+   * of Poopman policy.
+   */
+  let pmString = ``;
+  if (isFrontPage(connData, m)) {
+    pmString += `/tell ${m["id"]} `
+  }
+
   canSendDenyMessage = false;
   setTimeout(() => { canSendDenyMessage = true },
     cfg.denialMessageRateLimitSeconds || 8 * 1000);
 
   connData.bot.chat.send(
-    createDenialMessage(m), (m["location"] == "global")
+    pmString += createDenialMessage(m), (m["location"] == "global")
   );
 }
 
