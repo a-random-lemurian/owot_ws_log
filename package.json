@@ -6,7 +6,7 @@
     "ws": "^8.16.0"
   },
   "devDependencies": {
-    "owot-js": "^1.0.17"
+    "owot-js": "^1.0.18"
   },
   "name": "owot_ws_log",
   "description": "The logger that logs OWOT chat!",
