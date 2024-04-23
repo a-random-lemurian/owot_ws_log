@@ -215,15 +215,15 @@ function initWorldConn(world) {
     log_message(connData, JSON.stringify(m), '');
   });
 
-  connData.bot.on("close", () => {
+  connData.bot.on("close", async () => {
+    console.log(`reconnecting to ${world}`);
+    await initWorldConn(world);
+
     if (connData.allowGlobal) {
       console.log(`connection to '${world}' lost, it was designated receiver of global chat`);
-      reassignGlobalChatReceiver();
     }
 
-    console.log(`reconnecting to ${world}`);
     console.log(`summary of conn: ${connData}`)
-    initWorldConn(world);
   })
 
   console.log(`Joined '${world}'`);
