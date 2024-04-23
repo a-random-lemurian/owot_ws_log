@@ -1,6 +1,7 @@
 {
     "byUsername": {
-        "ultraleland7Ziggy": "Ziggy, fuck right off. Stop telling me what to do! Only Lemuria can!"
+        "ultraleland7Ziggy": "Ziggy, fuck right off. Stop telling me what to do! Only Lemuria can!",
+	    "typin_": "Error: please type the command at 350 wpm to continue"
     },
     "generic": [
         "You shall not pass, nor shall you run this command!",
