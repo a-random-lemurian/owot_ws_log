@@ -7,3 +7,4 @@ ignore_me
 node_modules
 config.json
 !config.json.example
+build

@@ -4,5 +4,11 @@
     ],
     "trustedUsers": [
         "FP"
-    ]
+    ],
+    "clickhouse": {
+        "host": "localhost",
+        "username": "default",
+        "password": "password",
+        "database": "owot_chat_log"
+    }
 }
