@@ -1,0 +1,64 @@
+
+
+import * as cmdr from "commander";
+import { Logger } from "./Logger";
+import { log } from "./app_winston";
+import { config as configType } from "./types/config"
+import { cmdArgs } from "./types/cmdArgs";
+import * as fs from "fs";
+import { inspect } from "util";
+import * as mig from "./migrate"
+
+const root = new cmdr.Command().version('2.0.0')
+    .helpCommand("help")
+    .option("-C --config <value>", "Configuration file", "../config.json")
+    .option("-d --debug", "Debug mode")
+
+const start = new cmdr.Command("start")
+    .description("Start a bot")
+    .option("--denials <value>", "JSON file to source snarky denials from", "../denials.json");
+
+root.addCommand(start);
+
+const migrate = new cmdr.Command("migrate")
+    .description("Migrate from the old SQLite3 based logger")
+    .addArgument(new cmdr.Argument("file", "SQLite3 database file"));
+
+root.addCommand(migrate)
+
+function getData(args: any): { allArgs: cmdArgs, config: configType } {
+    const allArgs: cmdArgs = { ...args, ...root.opts() }
+    const config: configType = JSON.parse(
+        fs.readFileSync(allArgs.config, { encoding: `utf8` })
+    );
+
+    return {allArgs, config};
+}
+
+migrate.action((args) => {
+    const data = getData(args);
+    mig.migrate({
+        clickhouse: data.config.clickhouse,
+        oldSqliteFile: args
+    })
+})
+
+start.action(async (args) => {
+    log.info(`Starting owot_ws_log v2...`);
+    log.info(`ffdr on top`);
+
+    const data = getData(args);
+
+    log.info(`read config at: ${data.allArgs.config}`);
+    log.info(`joining worlds: ${data.config.worlds}`);
+
+    const logger = new Logger(data.config);
+    await logger.init();
+
+    data.config.worlds.forEach(w => {
+        logger.join(w);
+    })
+})
+
+root.parse()
+
