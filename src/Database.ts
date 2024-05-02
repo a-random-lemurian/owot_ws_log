@@ -2,6 +2,7 @@ import * as clickhouse from "@depyronick/clickhouse-client";
 import { ChatMessage } from "./types/chatMessage";
 import { WorldMessageData } from "./World";
 import { log } from "./app_winston";
+import { inspect } from "util";
 
 export interface ClickhouseConnDetails {
     host: string
@@ -11,8 +12,8 @@ export interface ClickhouseConnDetails {
 }
 
 export async function initClickHouseClient(
-        credentials: ClickhouseConnDetails
-    ): Promise<clickhouse.ClickHouseClient> {
+    credentials: ClickhouseConnDetails
+): Promise<clickhouse.ClickHouseClient> {
     const client = new clickhouse.ClickHouseClient(credentials);
 
     log.info('Initialized a new ClickHouse client, will attempt to check functionality')
@@ -25,6 +26,10 @@ export async function initClickHouseClient(
     return client;
 };
 
+type chatCountRow = {
+    c: string
+}[]
+
 export class ChatDB {
     client: clickhouse.ClickHouseClient | null;
     credentials: ClickhouseConnDetails;
@@ -36,6 +41,12 @@ export class ChatDB {
 
     async connect() {
         this.client = await initClickHouseClient(this.credentials);
+    }
+
+    msgCount(cb: (n: number) => void) {
+        this.client?.queryPromise("select count(*) as c from chat_message").then((h) => {
+            cb(parseInt(h[0]['c'], 10));
+        });
     }
 
     logMsg(wmd: WorldMessageData) {
