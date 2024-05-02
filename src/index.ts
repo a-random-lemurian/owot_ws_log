@@ -32,7 +32,7 @@ function getData(args: any): { allArgs: cmdArgs, config: configType } {
         fs.readFileSync(allArgs.config, { encoding: `utf8` })
     );
 
-    return {allArgs, config};
+    return { allArgs, config };
 }
 
 migrate.action((args) => {
