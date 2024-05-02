@@ -3,9 +3,9 @@ const sqlite3 = require('sqlite3');
 const crypto = require('crypto');
 const fs = require('fs')
 
-const denials = require('./denials.json');
+const denials = require('../denials.json');
 
-const cfg = require('./config.json');
+const cfg = require('../config.json');
 require("dotenv").config();
 const DEBUG = (cfg.debug || process.env.NODE_ENV != "production");
 if (DEBUG) {
@@ -62,10 +62,10 @@ function log_message(connData, json, world) {
 }
 
 function reassignGlobalChatReceiver() {
-  console.log(`Redesignating global chat receiver`)
+  console.log(`Redesignating global chat receiver`);
   worldReceivingGlobal = null;
   let newGlobalReceiver = bots[Math.ceil(Math.random() * Object.keys(bots).length)];
-  bots[newGlobalReceiver].connData.allowGlobal = true;
+  bots[newGlobalReceiver].allowGlobal = true;
   worldReceivingGlobal = newGlobalReceiver;
   console.log(`Redesignated connection to '${world}' as receiver of global chat`);
 }
@@ -173,7 +173,7 @@ function processCmds(connData, m) {
   return;
 }
 
-function initWorldConn(world) {
+async function initWorldConn(world) {
   let allowGlobal = false;
   if (!worldReceivingGlobal && world != '') {
     console.log(`Designated connection to '${world}' as receiver of global chat`);
@@ -194,7 +194,7 @@ function initWorldConn(world) {
   };
   incrementalConnId++;
 
-  connData.bot.on("join", () => {
+  connData.bot.on("join", async () => {
     console.log(`chat logger started - world \'${world}\' - so far ${connData.id} connections`);
   });
 
@@ -215,28 +215,28 @@ function initWorldConn(world) {
     log_message(connData, JSON.stringify(m), '');
   });
 
-  connData.bot.on("close", () => {
+  connData.bot.on("close", async () => {
+    console.log(`reconnecting to ${world}`);
+    await initWorldConn(world);
+
     if (connData.allowGlobal) {
       console.log(`connection to '${world}' lost, it was designated receiver of global chat`);
-      reassignGlobalChatReceiver();
     }
 
-    console.log(`reconnecting to ${world}`);
     console.log(`summary of conn: ${connData}`)
-    initWorldConn(world);
   })
 
   console.log(`Joined '${world}'`);
   bots[world] = connData;
 }
 
-cfg.worlds.forEach(world => {
+cfg.worlds.forEach(async world => {
   let shouldReceiveGlobal = false;
   if (cfg.globalChatPolicy == "frontPageOnly" && world == '') {
     shouldReceiveGlobal = true;
   }
 
-  initWorldConn(world);
+  await initWorldConn(world);
 })
 
 console.log(`joined all the worlds`)

@@ -9,11 +9,9 @@ npm i
 ```
 
 Before running for the first time:
-```
-mkdir logs
-sqlite3 main.db '.read schema.sql'
-sqlite3 debug.db '.read schema.sql'
-```
+
+* Install Clickhouse.
+* Put some credentials into `config.json`.
 
 Run:
 ```
