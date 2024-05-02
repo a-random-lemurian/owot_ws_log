@@ -19,7 +19,7 @@
   },
   "name": "owot_ws_log",
   "description": "The logger that logs OWOT chat!",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "log.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
