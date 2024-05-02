@@ -1,3 +1,5 @@
+import { cmdArgs } from "./cmdArgs"
+
 export type config = {
     "worlds": string[],
     "trustedUsers": string[]
