@@ -126,7 +126,7 @@ export async function migrate(args: MigrateFuncArgsObj) {
     }).wait(() => {
         client.insertPromise('chat_message', rows)
             .then(() => {
-                console.log('y')
+                console.log('Migration is complete!')
             })
             .catch((err: any) => {
                 console.log(err)
