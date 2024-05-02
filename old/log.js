@@ -3,9 +3,9 @@ const sqlite3 = require('sqlite3');
 const crypto = require('crypto');
 const fs = require('fs')
 
-const denials = require('./denials.json');
+const denials = require('../denials.json');
 
-const cfg = require('./config.json');
+const cfg = require('../config.json');
 require("dotenv").config();
 const DEBUG = (cfg.debug || process.env.NODE_ENV != "production");
 if (DEBUG) {
