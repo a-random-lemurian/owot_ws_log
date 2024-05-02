@@ -1,6 +1,7 @@
 import { ChatDB } from "./Database";
 import { World } from "./World"
 import { log } from "./app_winston";
+import { cmdArgs } from "./types/cmdArgs";
 import { config } from "./types/config";
 
 interface Worlds {
@@ -11,10 +12,12 @@ export class Logger {
     worlds: Worlds = {};
     worldReceivingGlobal: string | null;
     db: ChatDB;
+    cliArgs: cmdArgs;
 
     constructor(allArgs: config) {
         this.worlds = {};
         this.worldReceivingGlobal = null;
+        this.cliArgs = allArgs.cliArgs;
         this.db = new ChatDB(allArgs.clickhouse);
     }
 
