@@ -39,7 +39,7 @@ export class World extends TypedEmitter<WorldEvents> {
             log.info(`Connected to '${name}'`);
         });
 
-        this.bot.on("chat", (m) => {
+        this.bot.on("message_chat", (m) => {
             if (!this.mayReceiveGlobal && m.location == SOB.ChatLocation.Global) {
                 return;
             }
