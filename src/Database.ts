@@ -46,13 +46,14 @@ export class ChatDB {
 
         this.client.insertPromise('chat_message', [{
             ...wmd.message,
-            world: wmd.world
+            world: wmd.worldName
         }])
             .then(() => {
                 log.silly("Successfully inserted the row!")
             })
             .catch((err) => {
                 log.error("!!! CLICKHOUSE FAILURE !!! --- " + err);
+                log.error(inspect(wmd));
             });
     }
 }

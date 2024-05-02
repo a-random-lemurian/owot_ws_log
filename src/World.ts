@@ -13,7 +13,8 @@ export function createOWOTurl(world: string): string {
 
 export interface WorldMessageData {
     message: ChatMessage,
-    world: string
+    worldName: string,
+    world: World
 }
 
 export interface WorldEvents {
@@ -58,7 +59,8 @@ export class World extends TypedEmitter<WorldEvents> {
             // Send message back to the parent Logger
             this.emit('message', {
                 'message': m,
-                'world': this.name
+                'world': this,
+                'worldName': this.name
             })
         });
 
