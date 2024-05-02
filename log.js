@@ -62,10 +62,10 @@ function log_message(connData, json, world) {
 }
 
 function reassignGlobalChatReceiver() {
-  console.log(`Redesignating global chat receiver`)
+  console.log(`Redesignating global chat receiver`);
   worldReceivingGlobal = null;
   let newGlobalReceiver = bots[Math.ceil(Math.random() * Object.keys(bots).length)];
-  bots[newGlobalReceiver].connData.allowGlobal = true;
+  bots[newGlobalReceiver].allowGlobal = true;
   worldReceivingGlobal = newGlobalReceiver;
   console.log(`Redesignated connection to '${world}' as receiver of global chat`);
 }
@@ -173,7 +173,7 @@ function processCmds(connData, m) {
   return;
 }
 
-function initWorldConn(world) {
+async function initWorldConn(world) {
   let allowGlobal = false;
   if (!worldReceivingGlobal && world != '') {
     console.log(`Designated connection to '${world}' as receiver of global chat`);
@@ -194,7 +194,7 @@ function initWorldConn(world) {
   };
   incrementalConnId++;
 
-  connData.bot.on("join", () => {
+  connData.bot.on("join", async () => {
     console.log(`chat logger started - world \'${world}\' - so far ${connData.id} connections`);
   });
 
@@ -230,13 +230,13 @@ function initWorldConn(world) {
   bots[world] = connData;
 }
 
-cfg.worlds.forEach(world => {
+cfg.worlds.forEach(async world => {
   let shouldReceiveGlobal = false;
   if (cfg.globalChatPolicy == "frontPageOnly" && world == '') {
     shouldReceiveGlobal = true;
   }
 
-  initWorldConn(world);
+  await initWorldConn(world);
 })
 
 console.log(`joined all the worlds`)
