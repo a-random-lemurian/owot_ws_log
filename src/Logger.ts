@@ -60,8 +60,10 @@ export class Logger {
             this.join(world);
         });
         this.worlds[world].on("message", (dataObj) => {
-            this.db.logMsg(dataObj);
-        })
+            if (!this.cliArgs.debug) {
+                this.db.logMsg(dataObj);
+            }
+        });
 
         log.info(
             `connecting to: '${world}' -- ${srg ? `will receive global`
