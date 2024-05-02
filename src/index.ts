@@ -12,7 +12,7 @@ import * as mig from "./migrate"
 const root = new cmdr.Command().version('2.0.0')
     .helpCommand("help")
     .option("-C --config <value>", "Configuration file", "../config.json")
-    .option("-d --debug", "Debug mode")
+    .option("-d --debug", "Debug mode, disables database insertion", false)
 
 const start = new cmdr.Command("start")
     .description("Start a bot")
