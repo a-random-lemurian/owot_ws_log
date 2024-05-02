@@ -56,6 +56,12 @@ start.action(async (args) => {
         log.info("Debug mode active. Will not write data to ClickHouse.");
     }
 
+    console.log(data.allArgs);
+
+    const logger = new Logger({
+        ...data.config,
+        "cliArgs": data.allArgs
+    });
     await logger.init();
 
     data.config.worlds.forEach(w => {
