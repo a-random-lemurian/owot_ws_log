@@ -12,7 +12,7 @@ import * as mig from "./migrate"
 const root = new cmdr.Command().version('2.0.0')
     .helpCommand("help")
     .option("-C --config <value>", "Configuration file", "../config.json")
-    .option("-d --debug", "Debug mode, disables database insertion", false)
+    .option("-d --debug", "Debug mode")
 
 const start = new cmdr.Command("start")
     .description("Start a bot")
@@ -52,7 +52,10 @@ start.action(async (args) => {
     log.info(`read config at: ${data.allArgs.config}`);
     log.info(`joining worlds: ${data.config.worlds}`);
 
-    const logger = new Logger(data.config);
+    if (data.allArgs.debug) {
+        log.info("Debug mode active. Will not write data to ClickHouse.");
+    }
+
     await logger.init();
 
     data.config.worlds.forEach(w => {
