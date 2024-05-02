@@ -53,4 +53,8 @@ export interface ChatMessage {
      * Sender's rank color, if any.
      */
     rankColor?: string;
+    /**
+     * Whether it was a private message, and who received it.
+     */
+    privateMessage?: "to_me" | "from_me";
 }
