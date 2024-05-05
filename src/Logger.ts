@@ -19,6 +19,7 @@ export class Logger {
     worldReceivingGlobal: string | null;
     db: ChatDB;
     cliArgs: cmdArgs;
+    config: config;
 
     ratelimits: { [key: string]: Ratelimit } = {
         /*
@@ -27,11 +28,12 @@ export class Logger {
         "size": { "refreshMs": 10, "triggered": false }
     }
 
-    constructor(allArgs: config) {
+    constructor(cfg: config) {
+        this.config = cfg;
         this.worlds = {};
         this.worldReceivingGlobal = null;
-        this.cliArgs = allArgs.cliArgs;
-        this.db = new ChatDB(allArgs.clickhouse);
+        this.cliArgs = cfg.cliArgs;
+        this.db = new ChatDB(cfg.clickhouse);
 
         Object.keys(this.ratelimits).forEach((k: string) => {
             setInterval(
