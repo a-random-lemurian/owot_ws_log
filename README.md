@@ -15,8 +15,7 @@ Before running for the first time:
 
 Run:
 ```
-NODE_ENV=production node log.js > logs/$(date --iso-8601)  # production
-NODE_ENV=debug node log.js > logs/$(date --iso-8601)
+node build/src/index.js -C config.json start &
 ```
 
 ## Configure
@@ -34,7 +33,7 @@ NODE_ENV=debug node log.js > logs/$(date --iso-8601)
 
 ## Commands
 
-* `ch size` - total size of SQLite database file
+* `ch size` - total amount of messages
 
 ## Etymology
 
