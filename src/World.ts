@@ -18,7 +18,7 @@ export interface WorldMessageData {
 }
 
 export interface WorldEvents {
-    'disconnected': () => void;
+    'disconnected': (worldName: string) => void;
     'message': (d: WorldMessageData) => void;
 };
 
@@ -66,7 +66,7 @@ export class World extends TypedEmitter<WorldEvents> {
 
         this.bot.on("disconnected", () => {
             log.warn(`disconnected from ${this.name}`);
-            this.emit('disconnected');
+            this.emit('disconnected', this.name);
         });
     }
 }

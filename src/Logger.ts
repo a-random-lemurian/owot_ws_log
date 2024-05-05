@@ -97,7 +97,10 @@ export class Logger {
         }
 
         this.worlds[world] = new World(world, srg);
-        this.worlds[world].on("disconnected", () => {
+        this.worlds[world].on("disconnected", (name) => {
+            if (this.worldReceivingGlobal == name) { 
+                this.worldReceivingGlobal = null;
+            }
             this.join(world);
         });
         this.worlds[world].on("message", (dataObj) => {
