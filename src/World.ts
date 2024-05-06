@@ -43,7 +43,13 @@ export class World extends TypedEmitter<WorldEvents> {
                 log.warn(`${this.name} - Ping timeout!`);
                 this.reportDisconnect();
             } else {
-                log.info(`${this.name} - server ping: ${result.ms} ms`);
+                if (result.ms < 15000) {
+                    return;
+                }
+                log.warn(
+                      `${this.name} - possible weirdness in progress!`
+                    + `server ping: ${result.ms} ms`
+                );
             }
         }, 60000);
 
