@@ -5,6 +5,8 @@ import { WorldMessageData } from "./types/WorldMessageData";
 import { log } from "./app_winston";
 import { cmdArgs } from "./types/cmdArgs";
 import { config } from "./types/config";
+import { CommandParser } from "./CommandParser";
+import * as cmds from "./commands";
 
 interface Worlds {
     [key: string]: World
@@ -21,6 +23,7 @@ export class Logger {
     db: ChatDB;
     cliArgs: cmdArgs;
     config: config;
+    parser: CommandParser;
 
     ratelimits: { [key: string]: Ratelimit } = {
         /*
@@ -36,6 +39,13 @@ export class Logger {
         this.cliArgs = cfg.cliArgs;
         this.db = new ChatDB(cfg.clickhouse);
 
+        this.parser = new CommandParser({
+            prefix: 'ch'
+        });
+        cmds.COMMANDS_LIST.forEach(cmd => {
+            this.parser.registerCommand(cmd);
+        });
+
         Object.keys(this.ratelimits).forEach((k: string) => {
             setInterval(
                 (a: Ratelimit) => { a.triggered = false },
@@ -43,24 +53,6 @@ export class Logger {
                 this.ratelimits[k]
             )
         })
-    }
-
-    /* commands */
-    cmds = {
-        size: (ctx: WorldMessageData) => {
-            log.info("User requested chat message count");
-
-            this.db.msgCount((n) => {
-                let str = ``;
-
-                if (ctx.worldName = '' && ctx.message.location == ChatLocation.Page) {
-                    str += `/tell ${ctx.message.id} `;
-                }
-
-                str += `${n} messages`;
-                ctx.world.bot.chat(str, ctx.message.location);
-            });
-        }
     }
 
     async init() {
@@ -111,8 +103,11 @@ export class Logger {
             }
         });
         this.worlds[world].on("message", (dataObj) => {
-            if (dataObj.message.message == 'ch size') {
-                this.cmds.size(dataObj);
+            if (dataObj.message.message.startsWith('ch', 0)) {
+                this.parser.executeCommand({
+                    ...dataObj,
+                    db: this.db
+                });
             }
         })
 
