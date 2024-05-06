@@ -21,7 +21,7 @@ enum CommandRestriction {
 
 interface Command {
     func: (ctx: CommandParserContext) => void;
-    restrictions: CommandRestriction[];
+    restrictions?: CommandRestriction[];
     name: string;
 }
 
