@@ -1,6 +1,6 @@
 import * as clickhouse from "@depyronick/clickhouse-client";
 import { ChatMessage } from "./types/chatMessage";
-import { WorldMessageData } from "./World";
+import { WorldMessageData } from "./types/WorldMessageData";
 import { log } from "./app_winston";
 import { inspect } from "util";
 

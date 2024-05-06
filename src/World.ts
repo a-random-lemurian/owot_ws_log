@@ -3,6 +3,7 @@ import { ChatMessage } from "./types/chatMessage";
 import { PingResult } from "./types/PingResult";
 import { log } from "./app_winston";
 import { TypedEmitter } from "tiny-typed-emitter";
+import { WorldMessageData } from "./types/WorldMessageData";
 
 export function createOWOTurl(world: string): string {
     if (world == '') {
@@ -10,12 +11,6 @@ export function createOWOTurl(world: string): string {
     } else {
         return `wss://ourworldoftext.com/${world}/ws/?hide=1`;
     }
-}
-
-export interface WorldMessageData {
-    message: ChatMessage,
-    worldName: string,
-    world: World
 }
 
 export interface WorldEvents {
