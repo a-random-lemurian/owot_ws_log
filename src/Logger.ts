@@ -5,6 +5,7 @@ import { WorldMessageData } from "./types/WorldMessageData";
 import { log } from "./app_winston";
 import { cmdArgs } from "./types/cmdArgs";
 import { config } from "./types/config";
+import { CommandParser } from "./CommandParser";
 
 interface Worlds {
     [key: string]: World
@@ -21,6 +22,7 @@ export class Logger {
     db: ChatDB;
     cliArgs: cmdArgs;
     config: config;
+    parser: CommandParser;
 
     ratelimits: { [key: string]: Ratelimit } = {
         /*
@@ -35,6 +37,9 @@ export class Logger {
         this.worldReceivingGlobal = null;
         this.cliArgs = cfg.cliArgs;
         this.db = new ChatDB(cfg.clickhouse);
+        this.parser = new CommandParser({
+            prefix: 'ch'
+        });
 
         Object.keys(this.ratelimits).forEach((k: string) => {
             setInterval(
