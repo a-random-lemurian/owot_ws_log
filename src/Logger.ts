@@ -6,6 +6,7 @@ import { log } from "./app_winston";
 import { cmdArgs } from "./types/cmdArgs";
 import { config } from "./types/config";
 import { CommandParser } from "./CommandParser";
+import * as glc from "git-last-commit";
 import * as cmds from "./commands";
 
 interface Worlds {
@@ -24,6 +25,7 @@ export class Logger {
     cliArgs: cmdArgs;
     config: config;
     parser: CommandParser;
+    lastCommit?: glc.Commit;
 
     ratelimits: { [key: string]: Ratelimit } = {
         /*
@@ -57,6 +59,9 @@ export class Logger {
 
     async init() {
         await this.db.connect();
+        await glc.getLastCommit(async (err, commit) => {
+            this.lastCommit = commit;
+        });
     }
 
     /**
@@ -106,10 +111,11 @@ export class Logger {
             if (dataObj.message.message.startsWith('ch', 0)) {
                 this.parser.executeCommand({
                     ...dataObj,
-                    db: this.db
+                    db: this.db,
+                    lastCommit: this.lastCommit
                 });
             }
-        })
+        });
 
         log.info(
             `connecting to: '${world}' -- ${srg ? `will receive global`

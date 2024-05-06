@@ -1,13 +1,15 @@
 import { ChatDB } from "./Database";
 import { World } from "./World";
 import { ChatMessage } from "./types/chatMessage";
+import * as glc from "git-last-commit";
 
 export interface CommandParserContext {
     message: ChatMessage,
     args?: string[],
     worldName: string,
     world: World,
-    db: ChatDB
+    db: ChatDB,
+    lastCommit: glc.Commit | undefined
 }
 
 export interface CommandParserConfiguration {
