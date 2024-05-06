@@ -101,6 +101,7 @@ export class Logger {
             if (this.worldReceivingGlobal == name) { 
                 this.worldReceivingGlobal = null;
             }
+            this.worlds[world].cleanup();
             this.join(world);
         });
         this.worlds[world].on("message", (dataObj) => {

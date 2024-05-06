@@ -1,5 +1,6 @@
 import * as SOB from "simple-owot-bot";
 import { ChatMessage } from "./types/chatMessage";
+import { PingResult } from "./types/PingResult";
 import { log } from "./app_winston";
 import { TypedEmitter } from "tiny-typed-emitter";
 
@@ -36,6 +37,16 @@ export class World extends TypedEmitter<WorldEvents> {
         this.mayReceiveGlobal = mayReceiveGlobal;
         this.bot = new SOB.Bot(createOWOTurl(name));
 
+        let i = setInterval(async () => {
+            const result = await this.ping();
+            if (!result.connected) {
+                log.warn(`${this.name} - Ping timeout!`);
+                this.reportDisconnect();
+            } else {
+                log.info(`${this.name} - server ping: ${result.ms} ms`);
+            }
+        }, 60000);
+
         this.bot.on("connected", () => {
             log.info(`Connected to '${name}'`);
         });
@@ -65,8 +76,35 @@ export class World extends TypedEmitter<WorldEvents> {
         });
 
         this.bot.on("disconnected", () => {
-            log.warn(`disconnected from ${this.name}`);
-            this.emit('disconnected', this.name);
+            this.reportDisconnect();
         });
+    }
+
+    ping(): Promise<PingResult> {
+        return new Promise((resolve) => {
+            this.bot.ping().then(n => {
+                resolve({ ms: n, connected: true });
+            });
+            setTimeout(() => {
+                resolve({ ms: 0, connected: false });
+            }, 30000);
+        })
+    }
+
+    reportDisconnect() {
+        log.warn(`disconnected from ${this.name}`);
+        this.emit('disconnected', this.name);
+    }
+
+    /*
+     * simple-owot-bot could really use a disconnect function.
+     *
+     * Potential problem: Just overwriting connection objects when they are
+     * disconnected MAY cause a pileup of old dead connection objects and
+     * use all the RAM. Unsure if the JS garbage collector (if it has one
+     * at all) will take care of it all.
+     */
+    cleanup() {
+        this.bot.removeAllListeners();
     }
 }
