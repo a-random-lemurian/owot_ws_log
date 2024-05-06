@@ -19,7 +19,7 @@ enum CommandRestriction {
     TrustedUsersOnly
 }
 
-interface Command {
+export interface Command {
     func: (ctx: CommandParserContext) => void;
     restrictions?: CommandRestriction[];
     name: string;
