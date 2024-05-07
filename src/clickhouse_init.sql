@@ -22,4 +22,17 @@ create table chat_message (
 )
 ENGINE = MergeTree
 PARTITION BY toYYYYMM(date)
-ORDER BY (date)
+ORDER BY (date);
+
+create table lastseen_optin (
+    id UInt32 PRIMARY KEY,
+    realUsername String CODEC(ZSTD(5)),
+    optin Boolean
+)
+ENGINE = MergeTree
+ORDER BY (id);
+
+CREATE INDEX idx_lastseen_optin ON lastseen_optin (
+    realUsername ASC
+);
+

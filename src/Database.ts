@@ -49,6 +49,49 @@ export class ChatDB {
         });
     }
 
+    async lastSeen(user: string) {
+        const rows = await this.client?.queryPromise(
+            "select * from chat_message where realUsername = {user:String}"
+            + " order by date desc limit 1",
+            { user: user }
+        );
+        return rows;
+    }
+
+    async lastSeenCheckOpt(user: string) {
+        const rows = await this.client?.queryPromise(
+            "select * from lastseen_optin where realUsername = {user:String}",
+            { user: user }
+        );
+        if (!rows || rows.length == 0) {
+            return true;
+        }
+        return rows[0].optin;
+    }
+
+    async lastSeenSetOpt(user: string, optin: boolean) {
+        const rows = await this.client?.queryPromise(
+            "select * from lastseen_optin where realUsername = {user:String}",
+            { user: user }
+        );
+        console.log(rows);
+
+        if (rows!.length != 0) {
+            // They already have their status set, run an update query.
+            this.client?.queryPromise("ALTER TABLE lastseen_optin "
+                + "UPDATE optin = {opt:Boolean} "
+                + "WHERE  realUsername = {user:String}",
+                { user: user, opt: +optin }
+            )
+        } else {
+            // They haven't chosen their status yet.
+            this.client?.insertPromise('lastseen_optin', [{
+                realUsername: user,
+                optin: optin
+            }]);
+        }
+    }
+
     logMsg(wmd: WorldMessageData) {
         if (!this.client) {
             log.error(`Attempting to insert a row when the database is not ready yet!`);
