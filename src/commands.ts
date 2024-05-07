@@ -22,6 +22,14 @@ function size(ctx: cpr.CommandParserContext) {
     });
 }
 
+function about(ctx: cpr.CommandParserContext) {
+    ctx.world.bot.chat(
+        "owot_ws_log is Lemuria's chat logger. "
+        + "Smile, your message is now in my database!"
+    );
+}
+
 export const COMMANDS_LIST: cpr.Command[] = [
-    {func: size, name: "size"}
+    { func: size, name: "size" },
+    { func: about, name: "about" }
 ];
