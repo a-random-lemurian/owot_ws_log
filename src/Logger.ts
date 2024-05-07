@@ -26,6 +26,7 @@ export class Logger {
     config: config;
     parser: CommandParser;
     lastCommit?: glc.Commit;
+    cache: object;
 
     ratelimits: { [key: string]: Ratelimit } = {
         /*
@@ -39,6 +40,7 @@ export class Logger {
         this.worlds = {};
         this.worldReceivingGlobal = null;
         this.cliArgs = cfg.cliArgs;
+        this.cache = {};
         this.db = new ChatDB(cfg.clickhouse);
 
         this.parser = new CommandParser({
@@ -114,7 +116,8 @@ export class Logger {
                     db: this.db,
                     lastCommit: this.lastCommit,
                     args: [],
-                    prefix: ''
+                    prefix: '',
+                    chat: () => { }
                 });
             }
         });

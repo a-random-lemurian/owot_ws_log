@@ -10,7 +10,9 @@ export interface CommandParserContext {
     world: World,
     db: ChatDB,
     lastCommit: glc.Commit | undefined,
-    prefix: string
+    prefix: string,
+
+    chat: (message: string) => void;
 }
 
 export interface CommandParserConfiguration {
@@ -49,6 +51,9 @@ export class CommandParser {
         const args = ctx.message.message.split(' ');
         ctx.args = args.splice(2);
         ctx.prefix = this.prefix;
+        ctx.chat = (message) => {
+            ctx.world.bot.chat(message, ctx.message.location);
+        }
         if (this.commands[args[1]]) {
             this.commands[args[1]].func(ctx);
         }

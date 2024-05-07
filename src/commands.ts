@@ -21,15 +21,14 @@ function size(ctx: cpr.CommandParserContext) {
 
         str += `${n} messages`;
         str += ` (took ${latency}ms)`
-        ctx.world.bot.chat(str, ctx.message.location);
+        ctx.chat(str);
     });
 }
 
 function about(ctx: cpr.CommandParserContext) {
-    ctx.world.bot.chat(
+    ctx.chat(
         "owot_ws_log is Lemuria's chat logger. "
-        + "Smile, your message is now in my database!",
-        ctx.message.location
+        + "Smile, your message is now in my database!"
     );
 }
 
@@ -46,14 +45,10 @@ function help(ctx: cpr.CommandParserContext) {
     }
 
     send:
-    ctx.world.bot.chat(str, ctx.message.location);
+    ctx.chat(str);
 }
 
 // TODO: cache the optouts in memory, skipping a trip to the DB
-
-// TODO: stop repeating "ctx.message.location" over and over again
-// and add a function to the World object or something or make `ctx` a
-// class and add wrappers or something idk
 
 const NO_LASTSEEN_FOR_ANONS =
     `The 'ch lastseen' command does not store data on anonymous users.`;
@@ -64,12 +59,12 @@ function isRegistered(message: ChatMessage) {
 
 async function lastseen(ctx: cpr.CommandParserContext) {
     if (ctx.args[0].match(/^\d+$/)) {
-        ctx.world.bot.chat(NO_LASTSEEN_FOR_ANONS, ctx.message.location);
+        ctx.chat(NO_LASTSEEN_FOR_ANONS);
         return;
     }
 
     if (!await ctx.db.lastSeenCheckOpt(ctx.args[0]!)) {
-        ctx.world.bot.chat(`${ctx.args[0]} has opted out of 'ch lastseen'.`, ctx.message.location);
+        ctx.chat(`${ctx.args[0]} has opted out of 'ch lastseen'.`);
         return;
     }
 
@@ -78,41 +73,36 @@ async function lastseen(ctx: cpr.CommandParserContext) {
     log.info(resp);
 
     if (resp?.length == 0) {
-        ctx.world.bot.chat(`${ctx.args[0]} is not in the database.`, ctx.message.location);
+        ctx.chat(`${ctx.args[0]} is not in the database.`);
         return;
     }
 
     //lsm: [L]ast [s]een [m]essage
     const lsm: ChatMessage = resp![0];
-    ctx.world.bot.chat(`${lsm.realUsername} was last seen at ` +
-        `${lsm.date} UTC`, ctx.message.location);
+    ctx.chat(`${lsm.realUsername} was last seen at ${lsm.date} UTC`);
 }
 
 function lastseen_optout(ctx: cpr.CommandParserContext) {
     if (!isRegistered(ctx.message)) {
-        ctx.world.bot.chat(NO_LASTSEEN_FOR_ANONS + ` You're always opted out.`, ctx.message.location);
+        ctx.chat(NO_LASTSEEN_FOR_ANONS + ` You're always opted out.`);
         return;
     }
 
     ctx.db.lastSeenSetOpt(ctx.message.realUsername!, false);
-    ctx.world.bot.chat(
+    ctx.chat(
           `You have been opted-out of 'ch lastseen'. | `
-        + `"Your data gets exposed. You know you are at risk." - OWOT Wiki Privacy Policy`,
-        ctx.message.location
+        + `"Your data gets exposed. You know you are at risk." - OWOT Wiki Privacy Policy`
     );
 }
 
 function lastseen_optin(ctx: cpr.CommandParserContext) {
     if (!isRegistered(ctx.message)) {
-        ctx.world.bot.chat(NO_LASTSEEN_FOR_ANONS + ` You're always opted in.`, ctx.message.location);
+        ctx.chat(NO_LASTSEEN_FOR_ANONS + ` You're always opted in.`);
         return;
     }
 
     ctx.db.lastSeenSetOpt(ctx.message.realUsername!, true);
-    ctx.world.bot.chat(
-        `You have opted back into 'ch lastseen'.`,
-        ctx.message.location
-    );
+    ctx.chat(`You have opted back into 'ch lastseen'.`);
 }
 
 export function commandList(): string {
@@ -130,7 +120,7 @@ function version(ctx: cpr.CommandParserContext) {
         str += `${new Date(parseInt(ctx.lastCommit.authoredOn) * 1000)}`;
     }
 
-    ctx.world.bot.chat(str, ctx.message.location);
+    ctx.chat(str);
 }
 
 export const COMMANDS_LIST: cpr.Command[] = [
