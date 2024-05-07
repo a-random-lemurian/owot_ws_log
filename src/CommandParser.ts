@@ -26,6 +26,7 @@ export interface Command {
     func: (ctx: CommandParserContext) => void;
     restrictions?: CommandRestriction[];
     name: string;
+    helpInfo?: string;
 }
 
 export class CommandParser {
