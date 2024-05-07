@@ -25,12 +25,13 @@ function size(ctx: cpr.CommandParserContext) {
 function about(ctx: cpr.CommandParserContext) {
     ctx.world.bot.chat(
         "owot_ws_log is Lemuria's chat logger. "
-        + "Smile, your message is now in my database!"
+        + "Smile, your message is now in my database!",
+        ctx.message.location
     );
 }
 
 function help(ctx: cpr.CommandParserContext) {
-    ctx.world.bot.chat(commandList());
+    ctx.world.bot.chat(commandList(), ctx.message.location);
 }
 
 export function commandList(): string {
@@ -48,7 +49,7 @@ function version(ctx: cpr.CommandParserContext) {
         str += `${new Date(parseInt(ctx.lastCommit.authoredOn) * 1000)}`;
     }
 
-    ctx.world.bot.chat(str);
+    ctx.world.bot.chat(str, ctx.message.location);
 }
 
 export const COMMANDS_LIST: cpr.Command[] = [
