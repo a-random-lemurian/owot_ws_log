@@ -35,7 +35,19 @@ function about(ctx: cpr.CommandParserContext) {
 }
 
 function help(ctx: cpr.CommandParserContext) {
-    ctx.world.bot.chat(commandList(), ctx.message.location);
+    let str = commandList();
+    if (ctx.args[0]) {
+        let cmd = COMMANDS_LIST.find(c => c.name === ctx.args[0]);
+        if (!cmd) {
+            str = `Error: command not found`;
+        }
+        else {
+            str = `${ctx.prefix} ${cmd.name} - ${cmd.helpInfo || '(no help text)'}`;
+        }
+    }
+
+    send:
+    ctx.world.bot.chat(str, ctx.message.location);
 }
 
 export function commandList(): string {
@@ -57,8 +69,8 @@ function version(ctx: cpr.CommandParserContext) {
 }
 
 export const COMMANDS_LIST: cpr.Command[] = [
-    { func: size, name: "size" },
-    { func: about, name: "about" },
-    { func: help, name: "help" },
-    { func: version, name: "version" }
+    { func: size, name: "size", helpInfo: "Total amount of chat messages" },
+    { func: about, name: "about", helpInfo: "Basic bot information" },
+    { func: help, name: "help", helpInfo: "Command list" },
+    { func: version, name: "version", helpInfo: "Git commit information" }
 ];
