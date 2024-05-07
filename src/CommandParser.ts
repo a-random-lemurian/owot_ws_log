@@ -9,7 +9,8 @@ export interface CommandParserContext {
     worldName: string,
     world: World,
     db: ChatDB,
-    lastCommit: glc.Commit | undefined
+    lastCommit: glc.Commit | undefined,
+    prefix: string
 }
 
 export interface CommandParserConfiguration {
@@ -29,9 +30,11 @@ export interface Command {
 
 export class CommandParser {
     commands: { [key: string]: Command };
+    prefix: string;
 
     constructor(cfg: CommandParserConfiguration) {
         this.commands = {};
+        this.prefix = cfg.prefix;
     }
 
     /*
@@ -44,6 +47,7 @@ export class CommandParser {
     executeCommand(ctx: CommandParserContext) {
         const args = ctx.message.message.split(' ');
         ctx.args = args.splice(2);
+        ctx.prefix = this.prefix;
         if (this.commands[args[1]]) {
             this.commands[args[1]].func(ctx);
         }
