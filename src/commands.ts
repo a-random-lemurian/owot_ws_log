@@ -123,6 +123,10 @@ function version(ctx: cpr.CommandParserContext) {
     ctx.chat(str);
 }
 
+function ffdr(ctx: cpr.CommandParserContext) {
+    ctx.chat("<https://www.youtube.com/@FallingForDeadRosesGaming>");
+}
+
 export const COMMANDS_LIST: cpr.Command[] = [
     { func: size, name: "size", helpInfo: "Total amount of chat messages" },
     { func: about, name: "about", helpInfo: "Basic bot information" },
@@ -130,5 +134,10 @@ export const COMMANDS_LIST: cpr.Command[] = [
     { func: version, name: "version", helpInfo: "Git commit information" },
     { func: lastseen, name: "lastseen", helpInfo: "See when a user last chatted" },
     { func: lastseen_optout, name: "lastseen-optout", helpInfo: "Opt-out of ch lastseen" },
-    { func: lastseen_optin, name: "lastseen-optin", helpInfo: "Opt back into ch lastseen" }
+    { func: lastseen_optin, name: "lastseen-optin", helpInfo: "Opt back into ch lastseen" },
+    {
+        func: ffdr,
+        name: "ffdr",
+        helpInfo: "Experience a rapid downward movement to please a group of dead specimens of multiple species within the genus Rosa"
+    }
 ];
