@@ -14,10 +14,14 @@ function size(ctx: cpr.CommandParserContext) {
             str += `/tell ${ctx.message.id} `;
         }
 
-        let latency = new Date().getMilliseconds() - start.getMilliseconds();
+        const end = new Date();
+        let latency = end.getMilliseconds();
+            - ctx.message.date.getMilliseconds();
+        let dbLatency = end.getMilliseconds();
+            - start.getMilliseconds();
 
         str += `${n} messages`;
-        str += ` (took ${latency}ms)`
+        str += ` (took ${latency}ms - db time ${dbLatency}ms)`
         ctx.world.bot.chat(str, ctx.message.location);
     });
 }
