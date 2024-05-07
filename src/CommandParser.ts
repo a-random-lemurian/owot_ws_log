@@ -5,7 +5,7 @@ import * as glc from "git-last-commit";
 
 export interface CommandParserContext {
     message: ChatMessage,
-    args?: string[],
+    args: string[],
     worldName: string,
     world: World,
     db: ChatDB,
