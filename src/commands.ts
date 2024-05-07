@@ -36,7 +36,7 @@ function help(ctx: cpr.CommandParserContext) {
 
 export function commandList(): string {
     let str = `commands (${COMMANDS_LIST.length}): `;
-    str += COMMANDS_LIST.map(c => c.name + ', ').join(' ').slice(0, -2);
+    str += COMMANDS_LIST.map(c => c.name + ', ').sort().join('').slice(0, -2);
     return str;
 }
 
