@@ -58,6 +58,8 @@ function isRegistered(message: ChatMessage) {
 }
 
 async function lastseen(ctx: cpr.CommandParserContext) {
+    const start = new Date();
+
     if (ctx.args[0].match(/^\d+$/)) {
         ctx.chat(NO_LASTSEEN_FOR_ANONS);
         return;
@@ -70,16 +72,20 @@ async function lastseen(ctx: cpr.CommandParserContext) {
 
     const resp = await ctx.db.lastSeen(ctx.args[0]!);
 
-    log.info(resp);
+    log.info(JSON.stringify(resp));
 
     if (resp?.length == 0) {
         ctx.chat(`${ctx.args[0]} is not in the database.`);
         return;
     }
 
+    const end = new Date();
+    const latency = end.getMilliseconds() - start.getMilliseconds();
+
     //lsm: [L]ast [s]een [m]essage
     const lsm: ChatMessage = resp![0];
-    ctx.chat(`${lsm.realUsername} was last seen at ${lsm.date} UTC`);
+    ctx.chat(`${lsm.realUsername} was last seen at ${lsm.date} UTC `
+        + `(db lookup took ${latency}ms)`);
 }
 
 function lastseen_optout(ctx: cpr.CommandParserContext) {
