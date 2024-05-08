@@ -11,15 +11,17 @@ export interface CommandParserContext {
     db: ChatDB,
     lastCommit: glc.Commit | undefined,
     prefix: string,
+    trustedUsers?: string[]
 
     chat: (message: string) => void;
 }
 
 export interface CommandParserConfiguration {
-    prefix: string
+    prefix: string,
+    trustedUsers: string[]
 }
 
-enum CommandRestriction {
+export enum CommandRestriction {
     // Only allows users in trustedUsers, in the config.json
     TrustedUsersOnly
 }
@@ -47,6 +49,16 @@ export class CommandParser {
         this.commands[cmd.name] = cmd;
     }
 
+    canRunCommand(cmd: Command, ctx: CommandParserContext) {
+        if (!cmd.restrictions) return true;
+        if (CommandRestriction.TrustedUsersOnly in cmd.restrictions) {
+            if (ctx.message.realUsername! in ctx.trustedUsers!) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     executeCommand(ctx: CommandParserContext) {
         const args = ctx.message.message.split(' ');
         ctx.args = args.splice(2);
@@ -54,7 +66,9 @@ export class CommandParser {
         ctx.chat = (message) => {
             ctx.world.bot.chat(message, ctx.message.location);
         }
-        if (this.commands[args[1]]) {
+
+        const cmd = this.commands[args[1]];
+        if (cmd && this.canRunCommand(cmd, ctx)) {
             this.commands[args[1]].func(ctx);
         }
     }

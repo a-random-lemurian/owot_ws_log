@@ -140,10 +140,6 @@ function ffdr(ctx: cpr.CommandParserContext) {
 }
 
 function traceback(ctx: cpr.CommandParserContext) {
-    if (ctx.message.realUsername !== 'lemuria') {
-        ctx.chat("This is a Lemuria-only command.");
-        return;
-    }
     Error.stackTraceLimit = 1000;
     const err = new Error("Not an error, but stacktrace was requested.");
     console.log(err);
@@ -164,5 +160,12 @@ export const COMMANDS_LIST: cpr.Command[] = [
         name: "ffdr",
         helpInfo: "Experience a rapid downward movement to please a group of dead specimens of multiple species within the genus Rosa"
     },
-    { func: traceback, name: "traceback", helpInfo: "Admin-only. Prints traceback on console." }
+    {
+        func: traceback,
+        name: "traceback",
+        helpInfo: "Admin-only. Prints traceback on console.",
+        restrictions: [
+            cpr.CommandRestriction.TrustedUsersOnly
+        ]
+    }
 ];
