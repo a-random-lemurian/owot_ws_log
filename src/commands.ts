@@ -138,6 +138,18 @@ function ffdr(ctx: cpr.CommandParserContext) {
     ctx.chat("<https://www.youtube.com/@FallingForDeadRosesGaming>");
 }
 
+function traceback(ctx: cpr.CommandParserContext) {
+    if (ctx.message.realUsername !== 'lemuria') {
+        ctx.chat("This is a Lemuria-only command.");
+        return;
+    }
+    Error.stackTraceLimit = 1000;
+    const err = new Error("Not an error, but stacktrace was requested.");
+    console.log(err);
+    log.info("Requested stacktrace is ready.");
+    ctx.chat("Check the console for the stacktrace, Lemuria.")
+}
+
 export const COMMANDS_LIST: cpr.Command[] = [
     { func: size, name: "size", helpInfo: "Total amount of chat messages" },
     { func: about, name: "about", helpInfo: "Basic bot information" },
@@ -150,5 +162,6 @@ export const COMMANDS_LIST: cpr.Command[] = [
         func: ffdr,
         name: "ffdr",
         helpInfo: "Experience a rapid downward movement to please a group of dead specimens of multiple species within the genus Rosa"
-    }
+    },
+    { func: traceback, name: "traceback", helpInfo: "Admin-only. Prints traceback on console." }
 ];
