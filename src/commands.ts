@@ -6,7 +6,7 @@ import { ChatMessage } from "./types/chatMessage";
 function size(ctx: cpr.CommandParserContext) {
     log.info("User requested chat message count");
 
-    const start = new Date();
+    const start = Date.now();
 
     ctx.db.msgCount((n) => {
         let str = ``;
@@ -15,12 +15,12 @@ function size(ctx: cpr.CommandParserContext) {
             str += `/tell ${ctx.message.id} `;
         }
 
-        const end = new Date();
-        let latency = end.getMilliseconds();
-        - start.getMilliseconds();
+        const end = Date.now();
+        let latency = end - start;
+        let totalLatency = end - ctx.message.date;
 
         str += `${n} messages`;
-        str += ` (took ${latency}ms)`
+        str += ` (latency: db ${latency}ms, total ${totalLatency}ms)`
         ctx.chat(str);
     });
 }
@@ -58,7 +58,7 @@ function isRegistered(message: ChatMessage) {
 }
 
 async function lastseen(ctx: cpr.CommandParserContext) {
-    const start = new Date();
+    const start = Date.now();
 
     if (ctx.args.length === 0) {
         ctx.chat(`You need to specify an OWOT username to check.`);
@@ -84,13 +84,14 @@ async function lastseen(ctx: cpr.CommandParserContext) {
         return;
     }
 
-    const end = new Date();
-    const latency = end.getMilliseconds() - start.getMilliseconds();
+    const end = Date.now();
+    const latency = end - start;
+    const totalLatency = end - ctx.message.date;
 
     //lsm: [L]ast [s]een [m]essage
     const lsm: ChatMessage = resp![0];
     ctx.chat(`${lsm.realUsername} was last seen at ${lsm.date} UTC `
-        + `(db lookup took ${latency}ms)`);
+        + `(latency: db ${latency}ms, total ${totalLatency}ms)`);
 }
 
 function lastseen_optout(ctx: cpr.CommandParserContext) {
