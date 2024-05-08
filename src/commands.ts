@@ -60,6 +60,11 @@ function isRegistered(message: ChatMessage) {
 async function lastseen(ctx: cpr.CommandParserContext) {
     const start = new Date();
 
+    if (ctx.args.length === 0) {
+        ctx.chat(`You need to specify an OWOT username to check.`);
+        return;
+    }
+
     if (ctx.args[0].match(/^\d+$/)) {
         ctx.chat(NO_LASTSEEN_FOR_ANONS);
         return;
