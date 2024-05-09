@@ -36,10 +36,12 @@ export interface Command {
 export class CommandParser {
     commands: { [key: string]: Command };
     prefix: string;
+    trustedUsers: string[];
 
     constructor(cfg: CommandParserConfiguration) {
         this.commands = {};
         this.prefix = cfg.prefix;
+        this.trustedUsers = cfg.trustedUsers;
     }
 
     /*
@@ -63,6 +65,7 @@ export class CommandParser {
         const args = ctx.message.message.split(' ');
         ctx.args = args.splice(2);
         ctx.prefix = this.prefix;
+        ctx.trustedUsers = this.trustedUsers;
         ctx.chat = (message) => {
             ctx.world.bot.chat(message, ctx.message.location);
         }
