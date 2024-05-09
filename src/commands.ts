@@ -40,7 +40,7 @@ function help(ctx: cpr.CommandParserContext) {
             str = `Error: command not found`;
         }
         else {
-            str = `${ctx.prefix} ${cmd.name} - ${cmd.helpInfo || '(no help text)'}`;
+            str = `Command Help -- ${ctx.prefix} ${cmd.name} - ${cmd.helpInfo || '(no help text)'}`;
         }
     }
 
