@@ -33,7 +33,7 @@ function about(ctx: cpr.CommandParserContext) {
 }
 
 function help(ctx: cpr.CommandParserContext) {
-    let str = commandList();
+    let str = commandList() + ` / *: Lemuria-only`;
     if (ctx.args[0]) {
         let cmd = COMMANDS_LIST.find(c => c.name === ctx.args[0]);
         if (!cmd) {
@@ -119,7 +119,17 @@ function lastseen_optin(ctx: cpr.CommandParserContext) {
 
 export function commandList(): string {
     let str = `commands (${COMMANDS_LIST.length}): `;
-    str += COMMANDS_LIST.map(c => c.name + ', ').sort().join('').slice(0, -2);
+    str += COMMANDS_LIST.map(c => {
+        let str = ``; 
+        str += c.name;
+        if (c.restrictions
+            && cpr.CommandRestriction.TrustedUsersOnly
+            in c.restrictions) {
+            str += '*';
+        }
+        str += ', ';
+        return str;
+    }).sort().join('').slice(0, -2);
     return str;
 }
 
