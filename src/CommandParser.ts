@@ -56,7 +56,7 @@ export class CommandParser {
         if (!cmd.restrictions) return true;
         if (!ctx.trustedUsers) return false;
         if (CommandRestriction.TrustedUsersOnly in cmd.restrictions) {
-            if (ctx.message.realUsername! in ctx.trustedUsers!) {
+            if (ctx.trustedUsers!.includes(ctx.message.realUsername!)) {
                 return true;
             }
         }
