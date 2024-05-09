@@ -70,7 +70,7 @@ async function lastseen(ctx: cpr.CommandParserContext) {
         return;
     }
 
-    if (!await ctx.db.lastSeenCheckOpt(ctx.args[0]!)) {
+    if (!(await ctx.db.lastSeenCheckOpt(ctx.args[0]!)).consent) {
         ctx.chat(`${ctx.args[0]} has opted out of 'ch lastseen'.`);
         return;
     }

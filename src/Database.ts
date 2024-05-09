@@ -58,15 +58,17 @@ export class ChatDB {
         return rows;
     }
 
-    async lastSeenCheckOpt(user: string) {
+    async lastSeenCheckOpt(user: string): Promise<{
+        found: boolean; consent: boolean;
+    }> {
         const rows = await this.client?.queryPromise(
             "select * from lastseen_optin where realUsername = {user:String}",
             { user: user }
         );
         if (!rows || rows.length == 0) {
-            return true;
+            return { found: false, consent: true };
         }
-        return rows[0].optin;
+        return { found: true, consent: rows[0].optin}
     }
 
     async lastSeenSetOpt(user: string, optin: boolean) {
