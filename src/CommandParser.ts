@@ -1,5 +1,6 @@
 import { ChatDB } from "./Database";
 import { World } from "./World";
+import { log } from "./app_winston";
 import { ChatMessage } from "./types/chatMessage";
 import * as glc from "git-last-commit";
 
@@ -58,6 +59,9 @@ export class CommandParser {
                 return true;
             }
         }
+        log.warn(`User does not have permission to run ch ${cmd.name}` +
+            ` -- ignoring command.`
+        + ` -- trusted user list: ${ctx.trustedUsers}`);
         return false;
     }
 
