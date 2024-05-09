@@ -54,6 +54,7 @@ export class CommandParser {
 
     canRunCommand(cmd: Command, ctx: CommandParserContext) {
         if (!cmd.restrictions) return true;
+        if (!ctx.trustedUsers) return false;
         if (CommandRestriction.TrustedUsersOnly in cmd.restrictions) {
             if (ctx.message.realUsername! in ctx.trustedUsers!) {
                 return true;
