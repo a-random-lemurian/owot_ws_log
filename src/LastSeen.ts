@@ -10,12 +10,13 @@ export class LastSeen {
     private lastMessages: {
         [key: string]: {
             consent: boolean,
-            msg: ChatMessage,
+            msg?: ChatMessage,
 
             // The last time a user wa
-            lastRead: Date,
+            lastRead?: Date,
         }
     }
+    private nonExistentUsers: string[];
     maxCacheSize: number;
     db: ChatDB;
 
@@ -33,6 +34,7 @@ export class LastSeen {
         this.maxCacheSize = 20000;
         this.db = cfg.db;
         this.lastMessages = {};
+        this.nonExistentUsers = [];
     }
 
     takeInMessage(msg: ChatMessage) {
@@ -49,6 +51,10 @@ export class LastSeen {
     async lastSeen(user: string) {
         this.checkCache();
 
+        if (this.nonExistentUsers.includes(user)) {
+            return null;
+        }
+
         if (this.hasUser(user)) {
             const last = await this.db.lastSeen(user);
             if (last?.length == 0) {}
@@ -61,6 +67,13 @@ export class LastSeen {
      */
     setConsent(user: string, consent: boolean) {
         this.checkCache();
+        if (this.hasUser(user)) {
+            this.lastMessages[user] = {
+                consent: consent,
+                lastRead: new Date(),
+                msg: undefined
+            };
+        }
         this.db.lastSeenSetOpt(user, consent);
     }
 
@@ -69,9 +82,17 @@ export class LastSeen {
      */
     async consent(user: string) {
         if (this.hasUser(user)) {
-            
+            return this.lastMessages[user].consent;
         }
         const result = await this.db.lastSeenCheckOpt(user);
+        let consent = false;
+        if (result.found == false) {
+            this.nonExistentUsers.push(user);
+            consent = true;
+        } else {
+            consent = result.consent;
+        }
+        return consent;
     }
 
 }
