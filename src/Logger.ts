@@ -45,7 +45,8 @@ export class Logger {
 
         this.parser = new CommandParser({
             prefix: 'ch',
-            trustedUsers: cfg.trustedUsers
+            trustedUsers: cfg.trustedUsers,
+            nickname: cfg.nickname || "owot_ws_log"
         });
         cmds.COMMANDS_LIST.forEach(cmd => {
             this.parser.registerCommand(cmd);

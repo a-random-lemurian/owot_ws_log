@@ -19,7 +19,8 @@ export interface CommandParserContext {
 
 export interface CommandParserConfiguration {
     prefix: string,
-    trustedUsers: string[]
+    trustedUsers: string[],
+    nickname: string
 }
 
 export enum CommandRestriction {
@@ -38,11 +39,13 @@ export class CommandParser {
     commands: { [key: string]: Command };
     prefix: string;
     trustedUsers: string[];
+    nickname: string
 
     constructor(cfg: CommandParserConfiguration) {
         this.commands = {};
         this.prefix = cfg.prefix;
         this.trustedUsers = cfg.trustedUsers;
+        this.nickname = cfg.nickname;
     }
 
     /*
@@ -72,7 +75,9 @@ export class CommandParser {
         ctx.prefix = this.prefix;
         ctx.trustedUsers = this.trustedUsers;
         ctx.chat = (message) => {
-            ctx.world.bot.chat(message, ctx.message.location);
+            ctx.world.bot.chat(
+                message, ctx.message.location, this.nickname
+            );
         }
 
         const cmd = this.commands[args[1]];

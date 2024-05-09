@@ -11,5 +11,6 @@ export type config = {
     },
     "debug": boolean,
     "denialMessageRateLimitSeconds": number,
-    "cliArgs": cmdArgs
+    "cliArgs": cmdArgs,
+    "nickname": string | ""
 }
