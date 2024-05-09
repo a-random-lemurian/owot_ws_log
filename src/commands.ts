@@ -157,11 +157,20 @@ function traceback(ctx: cpr.CommandParserContext) {
     ctx.chat("Check the console for the stacktrace, Lemuria.")
 }
 
+function src(ctx: cpr.CommandParserContext) {
+    ctx.chat("I'm open-source and MIT-licensed: <https://github.com/a-random-lemurian/owot_ws_log>");
+}
+
 export const COMMANDS_LIST: cpr.Command[] = [
     {
         func: size,
         name: "size",
         helpInfo: "Total amount of chat messages"
+    },
+    {
+        func: src,
+        name: "src",
+        helpInfo: "Link to the bot's source code"
     },
     {
         func: about,
