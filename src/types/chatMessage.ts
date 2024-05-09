@@ -44,7 +44,7 @@ export interface ChatMessage {
     /**
      * The date and time on which the message was sent.
      */
-    date: Date;
+    date: number;
     /**
      * Sender's rank name, if any.
      */

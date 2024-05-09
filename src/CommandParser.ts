@@ -1,5 +1,6 @@
 import { ChatDB } from "./Database";
 import { World } from "./World";
+import { log } from "./app_winston";
 import { ChatMessage } from "./types/chatMessage";
 import * as glc from "git-last-commit";
 
@@ -11,15 +12,18 @@ export interface CommandParserContext {
     db: ChatDB,
     lastCommit: glc.Commit | undefined,
     prefix: string,
+    trustedUsers?: string[]
 
     chat: (message: string) => void;
 }
 
 export interface CommandParserConfiguration {
-    prefix: string
+    prefix: string,
+    trustedUsers: string[],
+    nickname: string
 }
 
-enum CommandRestriction {
+export enum CommandRestriction {
     // Only allows users in trustedUsers, in the config.json
     TrustedUsersOnly
 }
@@ -34,10 +38,14 @@ export interface Command {
 export class CommandParser {
     commands: { [key: string]: Command };
     prefix: string;
+    trustedUsers: string[];
+    nickname: string
 
     constructor(cfg: CommandParserConfiguration) {
         this.commands = {};
         this.prefix = cfg.prefix;
+        this.trustedUsers = cfg.trustedUsers;
+        this.nickname = cfg.nickname;
     }
 
     /*
@@ -47,14 +55,33 @@ export class CommandParser {
         this.commands[cmd.name] = cmd;
     }
 
+    canRunCommand(cmd: Command, ctx: CommandParserContext) {
+        if (!cmd.restrictions) return true;
+        if (!ctx.trustedUsers) return false;
+        if (CommandRestriction.TrustedUsersOnly in cmd.restrictions) {
+            if (ctx.trustedUsers!.includes(ctx.message.realUsername!)) {
+                return true;
+            }
+        }
+        log.warn(`User does not have permission to run ch ${cmd.name}` +
+            ` -- ignoring command.`
+        + ` -- trusted user list: ${ctx.trustedUsers}`);
+        return false;
+    }
+
     executeCommand(ctx: CommandParserContext) {
         const args = ctx.message.message.split(' ');
         ctx.args = args.splice(2);
         ctx.prefix = this.prefix;
+        ctx.trustedUsers = this.trustedUsers;
         ctx.chat = (message) => {
-            ctx.world.bot.chat(message, ctx.message.location);
+            ctx.world.bot.chat(
+                message, ctx.message.location, this.nickname
+            );
         }
-        if (this.commands[args[1]]) {
+
+        const cmd = this.commands[args[1]];
+        if (cmd && this.canRunCommand(cmd, ctx)) {
             this.commands[args[1]].func(ctx);
         }
     }

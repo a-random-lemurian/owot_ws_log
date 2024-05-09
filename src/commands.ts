@@ -6,7 +6,7 @@ import { ChatMessage } from "./types/chatMessage";
 function size(ctx: cpr.CommandParserContext) {
     log.info("User requested chat message count");
 
-    const start = new Date();
+    const start = Date.now();
 
     ctx.db.msgCount((n) => {
         let str = ``;
@@ -15,12 +15,12 @@ function size(ctx: cpr.CommandParserContext) {
             str += `/tell ${ctx.message.id} `;
         }
 
-        const end = new Date();
-        let latency = end.getMilliseconds();
-        - start.getMilliseconds();
+        const end = Date.now();
+        let latency = end - start;
+        let totalLatency = end - ctx.message.date;
 
         str += `${n} messages`;
-        str += ` (took ${latency}ms)`
+        str += ` (latency: db ${latency}ms, total ${totalLatency}ms)`
         ctx.chat(str);
     });
 }
@@ -33,14 +33,14 @@ function about(ctx: cpr.CommandParserContext) {
 }
 
 function help(ctx: cpr.CommandParserContext) {
-    let str = commandList();
+    let str = commandList() + ` / *: Lemuria-only`;
     if (ctx.args[0]) {
         let cmd = COMMANDS_LIST.find(c => c.name === ctx.args[0]);
         if (!cmd) {
             str = `Error: command not found`;
         }
         else {
-            str = `${ctx.prefix} ${cmd.name} - ${cmd.helpInfo || '(no help text)'}`;
+            str = `Command Help -- ${ctx.prefix} ${cmd.name} - ${cmd.helpInfo || '(no help text)'}`;
         }
     }
 
@@ -58,7 +58,7 @@ function isRegistered(message: ChatMessage) {
 }
 
 async function lastseen(ctx: cpr.CommandParserContext) {
-    const start = new Date();
+    const start = Date.now();
 
     if (ctx.args.length === 0) {
         ctx.chat(`You need to specify an OWOT username to check.`);
@@ -84,13 +84,14 @@ async function lastseen(ctx: cpr.CommandParserContext) {
         return;
     }
 
-    const end = new Date();
-    const latency = end.getMilliseconds() - start.getMilliseconds();
+    const end = Date.now();
+    const latency = end - start;
+    const totalLatency = end - ctx.message.date;
 
     //lsm: [L]ast [s]een [m]essage
     const lsm: ChatMessage = resp![0];
     ctx.chat(`${lsm.realUsername} was last seen at ${lsm.date} UTC `
-        + `(db lookup took ${latency}ms)`);
+        + `(latency: db ${latency}ms, total ${totalLatency}ms)`);
 }
 
 function lastseen_optout(ctx: cpr.CommandParserContext) {
@@ -118,7 +119,17 @@ function lastseen_optin(ctx: cpr.CommandParserContext) {
 
 export function commandList(): string {
     let str = `commands (${COMMANDS_LIST.length}): `;
-    str += COMMANDS_LIST.map(c => c.name + ', ').sort().join('').slice(0, -2);
+    str += COMMANDS_LIST.map(c => {
+        let str = ``; 
+        str += c.name;
+        if (c.restrictions
+            && cpr.CommandRestriction.TrustedUsersOnly
+            in c.restrictions) {
+            str += '*';
+        }
+        str += ', ';
+        return str;
+    }).sort().join('').slice(0, -2);
     return str;
 }
 
@@ -139,10 +150,6 @@ function ffdr(ctx: cpr.CommandParserContext) {
 }
 
 function traceback(ctx: cpr.CommandParserContext) {
-    if (ctx.message.realUsername !== 'lemuria') {
-        ctx.chat("This is a Lemuria-only command.");
-        return;
-    }
     Error.stackTraceLimit = 1000;
     const err = new Error("Not an error, but stacktrace was requested.");
     console.log(err);
@@ -151,17 +158,53 @@ function traceback(ctx: cpr.CommandParserContext) {
 }
 
 export const COMMANDS_LIST: cpr.Command[] = [
-    { func: size, name: "size", helpInfo: "Total amount of chat messages" },
-    { func: about, name: "about", helpInfo: "Basic bot information" },
-    { func: help, name: "help", helpInfo: "Command list" },
-    { func: version, name: "version", helpInfo: "Git commit information" },
-    { func: lastseen, name: "lastseen", helpInfo: "See when a user last chatted" },
-    { func: lastseen_optout, name: "lastseen-optout", helpInfo: "Opt-out of ch lastseen" },
-    { func: lastseen_optin, name: "lastseen-optin", helpInfo: "Opt back into ch lastseen" },
+    {
+        func: size,
+        name: "size",
+        helpInfo: "Total amount of chat messages"
+    },
+    {
+        func: about,
+        name: "about",
+        helpInfo: "Basic bot information"
+    },
+    {
+        func: help,
+        name: "help",
+        helpInfo: "Command list"
+    },
+    {
+        func: version,
+        name: "version",
+        helpInfo: "Git commit information"
+    },
+    {
+        func: lastseen,
+        name: "lastseen",
+        helpInfo: "See when a user last chatted"
+    },
+    {
+        func: lastseen_optout,
+        name: "lastseen-optout",
+        helpInfo: "Opt-out of ch lastseen"
+    },
+    {
+        func: lastseen_optin,
+        name: "lastseen-optin",
+        helpInfo: "Opt back into ch lastseen"
+    },
     {
         func: ffdr,
         name: "ffdr",
-        helpInfo: "Experience a rapid downward movement to please a group of dead specimens of multiple species within the genus Rosa"
+        helpInfo: "Experience a rapid downward movement to please a group of"
+            + " dead specimens of multiple species within the genus Rosa"
     },
-    { func: traceback, name: "traceback", helpInfo: "Admin-only. Prints traceback on console." }
+    {
+        func: traceback,
+        name: "traceback",
+        helpInfo: "Admin-only. Prints traceback on console.",
+        restrictions: [
+            cpr.CommandRestriction.TrustedUsersOnly
+        ]
+    }
 ];

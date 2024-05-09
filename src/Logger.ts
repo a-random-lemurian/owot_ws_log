@@ -44,7 +44,9 @@ export class Logger {
         this.db = new ChatDB(cfg.clickhouse);
 
         this.parser = new CommandParser({
-            prefix: 'ch'
+            prefix: 'ch',
+            trustedUsers: cfg.trustedUsers,
+            nickname: cfg.nickname || "owot_ws_log"
         });
         cmds.COMMANDS_LIST.forEach(cmd => {
             this.parser.registerCommand(cmd);
