@@ -9,3 +9,4 @@ config.json
 !config.json.example
 build
 dist
+coverage
