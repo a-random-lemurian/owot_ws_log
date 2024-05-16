@@ -1,7 +1,7 @@
 import * as clickhouse from "@depyronick/clickhouse-client";
 import { ChatMessage } from "./types/chatMessage";
 import { WorldMessageData } from "./types/WorldMessageData";
-import { log } from "./app_winston";
+import { log as awlog } from "./app_winston";
 import { inspect } from "util";
 
 export interface ClickhouseConnDetails {
@@ -10,6 +10,8 @@ export interface ClickhouseConnDetails {
     password: string
     database: string
 }
+
+const log = awlog.child({ moduleName: "ChatDB" });
 
 export async function initClickHouseClient(
     credentials: ClickhouseConnDetails

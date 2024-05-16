@@ -1,8 +1,10 @@
 import { ChatDB } from "./Database";
 import { World } from "./World";
-import { log } from "./app_winston";
+import { log as awlog } from "./app_winston";
 import { ChatMessage } from "./types/chatMessage";
 import * as glc from "git-last-commit";
+
+const log = awlog.child({ moduleName: "CommandParser" });
 
 export interface CommandParserContext {
     message: ChatMessage,

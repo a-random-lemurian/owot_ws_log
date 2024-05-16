@@ -2,12 +2,14 @@
 
 import * as cmdr from "commander";
 import { Logger } from "./Logger";
-import { log } from "./app_winston";
+import { log as awlog } from "./app_winston";
 import { config as configType } from "./types/config"
 import { cmdArgs } from "./types/cmdArgs";
 import * as fs from "fs";
 import { inspect } from "util";
 import * as mig from "./migrate"
+
+const log = awlog.child({ moduleName: "CLI" });
 
 const root = new cmdr.Command().version('2.0.0')
     .helpCommand("help")

@@ -2,12 +2,14 @@ import { ChatLocation } from "simple-owot-bot";
 import { ChatDB } from "./Database";
 import { World } from "./World";
 import { WorldMessageData } from "./types/WorldMessageData";
-import { log } from "./app_winston";
+import { log as awlog } from "./app_winston";
 import { cmdArgs } from "./types/cmdArgs";
 import { config } from "./types/config";
 import { CommandParser } from "./CommandParser";
 import * as glc from "git-last-commit";
 import * as cmds from "./commands";
+
+const log = awlog.child({ moduleName: "Logger" });
 
 interface Worlds {
     [key: string]: World
