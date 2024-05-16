@@ -29,7 +29,8 @@
     "watch": "tsc --watch",
     "create-test-data": "node build/src/test/util/create-test-data",
     "production": "node build/src/index.js -C config.json start --denials denials.json",
-    "development": "node build/src/index.js -C config.json start --denials denials.json --debug"
+    "development": "node build/src/index.js -C config.json start --denials denials.json --debug",
+    "test": "npx jest"
   },
   "author": "Lemuria",
   "license": "MIT"
