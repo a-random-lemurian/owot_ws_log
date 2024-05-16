@@ -161,11 +161,29 @@ function src(ctx: cpr.CommandParserContext) {
     ctx.chat("I'm open-source and MIT-licensed: <https://github.com/a-random-lemurian/owot_ws_log>");
 }
 
+function emily(ctx: cpr.CommandParserContext) {
+    ctx.chat("Emily Anderson is an Alaskan singer-songwriter who lives in Los Angeles: <https://emilyandersonak.com>");
+}
+
+function nora(ctx: cpr.CommandParserContext) {
+    ctx.chat("Nora Elise Proctor is a Lemurian OWOT user. She is the creator of owot_ws_log, the bot that keeps an eye on you. D9 hates her. On the other side of the fourth wall, he is Lemuria and Nora is just his roleplay name. Shhhh!");
+}
+
 export const COMMANDS_LIST: cpr.Command[] = [
     {
         func: size,
         name: "size",
         helpInfo: "Total amount of chat messages"
+    },
+    {
+        func: emily,
+        name: "emily",
+        helpInfo: "Emily Anderson"
+    },
+    {
+        func: nora,
+        name: "nora",
+        helpInfo: "Nora Elise Proctor"
     },
     {
         func: src,
