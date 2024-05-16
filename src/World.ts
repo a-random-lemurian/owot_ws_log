@@ -1,7 +1,7 @@
 import * as SOB from "simple-owot-bot";
 import { ChatMessage } from "./types/chatMessage";
 import { PingResult } from "./types/PingResult";
-import { log } from "./app_winston";
+import { log as awlog } from "./app_winston";
 import { TypedEmitter } from "tiny-typed-emitter";
 import { WorldMessageData } from "./types/WorldMessageData";
 
@@ -12,6 +12,8 @@ export function createOWOTurl(world: string): string {
         return `wss://ourworldoftext.com/${world}/ws/?hide=1`;
     }
 }
+
+const log = awlog.child({ moduleName: "World" });
 
 export interface WorldEvents {
     'disconnected': (worldName: string) => void;

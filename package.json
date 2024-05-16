@@ -26,7 +26,10 @@
   "version": "0.2.0",
   "main": "log.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "tsc --watch",
+    "create-test-data": "node build/src/test/util/create-test-data",
+    "production": "node build/src/index.js -C config.json start --denials denials.json",
+    "development": "node build/src/index.js -C config.json start --denials denials.json --debug"
   },
   "author": "Lemuria",
   "license": "MIT"
