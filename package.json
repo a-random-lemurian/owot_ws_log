@@ -13,9 +13,12 @@
     "ws": "^8.16.0"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.12.7",
     "@types/utf8": "^3.0.3",
+    "jest": "^29.7.0",
     "owot-js": "^1.0.18",
+    "ts-jest": "^29.1.2",
     "typescript": "^5.4.3"
   },
   "name": "owot_ws_log",
@@ -26,7 +29,8 @@
     "watch": "tsc --watch",
     "create-test-data": "node build/src/test/util/create-test-data",
     "production": "node build/src/index.js -C config.json start --denials denials.json",
-    "development": "node build/src/index.js -C config.json start --denials denials.json --debug"
+    "development": "node build/src/index.js -C config.json start --denials denials.json --debug",
+    "test": "npx jest"
   },
   "author": "Lemuria",
   "license": "MIT"
