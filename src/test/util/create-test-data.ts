@@ -33,7 +33,7 @@ root.action(async (args: {
     for (let i = 0; i < 100; i++) {
         db.lastSeenSetOpt(
             `FakeUser${i.toString().padStart(3, '0')}`,
-            (Math.random() > 0.5)
+            (i % 2 == 0)
         );
     }
 });
