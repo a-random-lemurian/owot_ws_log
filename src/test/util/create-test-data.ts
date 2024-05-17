@@ -4,6 +4,7 @@ import { ChatDB, ClickhouseConnDetails } from "../../Database";
 import { config } from "../../types/config";
 import { log as awlog } from "../../app_winston";
 import { inspect } from "util";
+import { MessageGenerator } from "../lib/MessageGenerator";
 
 const log = awlog.child({ moduleName: "create-test-data" });
 
@@ -29,12 +30,21 @@ root.action(async (args: {
     const db = new ChatDB(creds);
     await db.connect();
     log.info(`Connected to the database.`);
+    const mg = new MessageGenerator();
 
     for (let i = 0; i < 100; i++) {
-        db.lastSeenSetOpt(
+        log.info(`Setting row ${i}...`)
+        await db.lastSeenSetOpt(
             `FakeUser${i.toString().padStart(3, '0')}`,
             (i % 2 == 0)
         );
+        for (let j = 0; j < 50; j++) {
+            log.info(`Adding a message for ${i}...`);
+            await db.logMsg({
+                message: mg.generateMessage(),
+                worldName: ""
+            });
+        }
     }
 });
 
