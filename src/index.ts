@@ -13,12 +13,15 @@ const log = awlog.child({ moduleName: "CLI" });
 
 const root = new cmdr.Command().version('2.0.0')
     .helpCommand("help")
-    .option("-C --config <value>", "Configuration file", "../config.json")
-    .option("-d --debug", "Debug mode, disables database insertion", false)
+    .option("-C, --config <value>", "Configuration file", "../config.json")
+    .option("-d, --debug", "Debug mode", false)
+    ;
 
-const start = new cmdr.Command("start")
+    const start = new cmdr.Command("start")
     .description("Start a bot")
-    .option("--denials <value>", "JSON file to source snarky denials from", "../denials.json");
+    .option("-D, --denials <value>", "JSON file to source snarky denials from", "../denials.json")
+    .option("-N, --no-database", "Do not insert into ClickHouse", false)
+;
 
 root.addCommand(start);
 
