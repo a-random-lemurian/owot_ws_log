@@ -20,7 +20,7 @@ const root = new cmdr.Command().version('2.0.0')
     const start = new cmdr.Command("start")
     .description("Start a bot")
     .option("-D, --denials <value>", "JSON file to source snarky denials from", "../denials.json")
-    .option("-N, --no-database", "Do not insert into ClickHouse", false)
+    .option("-N, --no-database", "Do not insert into ClickHouse", true)
 ;
 
 root.addCommand(start);
