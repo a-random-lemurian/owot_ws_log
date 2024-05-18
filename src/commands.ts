@@ -145,16 +145,16 @@ function version(ctx: cpr.CommandParserContext) {
     ctx.chat(str);
 }
 
-function ffdr(ctx: cpr.CommandParserContext) {
-    ctx.chat("<https://www.youtube.com/@FallingForDeadRosesGaming>");
-}
-
 function traceback(ctx: cpr.CommandParserContext) {
     Error.stackTraceLimit = 1000;
     const err = new Error("Not an error, but stacktrace was requested.");
     console.log(err);
     log.info("Requested stacktrace is ready.");
     ctx.chat("Check the console for the stacktrace, Lemuria.")
+}
+
+function ffdr(ctx: cpr.CommandParserContext) {
+    ctx.chat("<https://www.youtube.com/@FallingForDeadRosesGaming>");
 }
 
 function src(ctx: cpr.CommandParserContext) {
