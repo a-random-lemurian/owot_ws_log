@@ -118,6 +118,7 @@ export class Logger {
                 this.parser.executeCommand({
                     ...dataObj,
                     db: this.db,
+                    world: this.worlds[world],
                     lastCommit: this.lastCommit,
                     args: [],
                     prefix: '',
