@@ -109,7 +109,7 @@ export class Logger {
             this.join(world);
         });
         this.worlds[world].on("message", (dataObj) => {
-            if (!this.cliArgs.debug) {
+            if (this.cliArgs.database) {
                 this.db.logMsg(dataObj);
             }
         });
