@@ -73,7 +73,6 @@ export class World extends TypedEmitter<WorldEvents> {
             // Send message back to the parent Logger
             this.emit('message', {
                 'message': m,
-                'world': this,
                 'worldName': this.name
             })
         });
