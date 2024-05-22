@@ -169,6 +169,10 @@ function nora(ctx: cpr.CommandParserContext) {
     ctx.chat("Nora Elise Proctor is a Lemurian OWOT user. She is the creator of owot_ws_log, the bot that keeps an eye on you. D9 hates her. On the other side of the fourth wall, he is Lemuria and Nora is just his roleplay name. Shhhh!");
 }
 
+function thiguka(ctx: cpr.CommandParserContext) {
+    ctx.chat("Thiguka, a constructed language by Lemuria, is at /thigukalang (though documentation is not complete). As for /thiguka - someone namesniped it. ")
+}
+
 export const COMMANDS_LIST: cpr.Command[] = [
     {
         func: size,
