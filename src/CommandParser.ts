@@ -2,6 +2,7 @@ import { ChatDB } from "./Database";
 import { World } from "./World";
 import { log as awlog } from "./app_winston";
 import { ChatMessage } from "./types/chatMessage";
+import { ThigukaWordProvider } from "./ThigukaWordProvider";
 import * as glc from "git-last-commit";
 
 const log = awlog.child({ moduleName: "CommandParser" });
@@ -15,6 +16,7 @@ export interface CommandParserContext {
     lastCommit: glc.Commit | undefined,
     prefix: string,
     trustedUsers?: string[]
+    thiguka?: ThigukaWordProvider
 
     chat: (message: string) => void;
 }
@@ -22,7 +24,8 @@ export interface CommandParserContext {
 export interface CommandParserConfiguration {
     prefix: string,
     trustedUsers: string[],
-    nickname: string
+    nickname: string,
+    thiguka: ThigukaWordProvider
 }
 
 export enum CommandRestriction {
@@ -41,13 +44,15 @@ export class CommandParser {
     commands: { [key: string]: Command };
     prefix: string;
     trustedUsers: string[];
-    nickname: string
+    nickname: string;
+    thiguka: ThigukaWordProvider;
 
     constructor(cfg: CommandParserConfiguration) {
         this.commands = {};
         this.prefix = cfg.prefix;
         this.trustedUsers = cfg.trustedUsers;
         this.nickname = cfg.nickname;
+        this.thiguka = cfg.thiguka;
     }
 
     /*
@@ -76,6 +81,7 @@ export class CommandParser {
         ctx.args = args.splice(2);
         ctx.prefix = this.prefix;
         ctx.trustedUsers = this.trustedUsers;
+        ctx.thiguka = this.thiguka;
         ctx.chat = (message) => {
             ctx.world.bot.chat(
                 message, ctx.message.location, this.nickname

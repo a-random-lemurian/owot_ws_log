@@ -8,6 +8,7 @@ import { cmdArgs } from "./types/cmdArgs";
 import * as fs from "fs";
 import { inspect } from "util";
 import * as mig from "./migrate"
+import { ThigukaEntry } from "./ThigukaWordProvider";
 
 const log = awlog.child({ moduleName: "CLI" });
 
@@ -21,6 +22,7 @@ const root = new cmdr.Command().version('2.0.0')
     .description("Start a bot")
     .option("-D, --denials <value>", "JSON file to source snarky denials from", "../denials.json")
     .option("-N, --no-database", "Do not insert into ClickHouse", true)
+    .option("    --thiguka <value>", "JSON file for Thiguka words", "../thiguka.json")
 ;
 
 root.addCommand(start);
@@ -31,13 +33,16 @@ const migrate = new cmdr.Command("migrate")
 
 root.addCommand(migrate)
 
-function getData(args: any): { allArgs: cmdArgs, config: configType } {
+function getData(args: any): { allArgs: cmdArgs, config: configType, thigukaWordList: ThigukaEntry[] } {
     const allArgs: cmdArgs = { ...args, ...root.opts() }
     const config: configType = JSON.parse(
         fs.readFileSync(allArgs.config, { encoding: `utf8` })
     );
+    const thigukaWords = JSON.parse(
+        fs.readFileSync(allArgs.thiguka, { encoding: `utf8` })
+    );
 
-    return { allArgs, config };
+    return { allArgs, config, thigukaWordList: thigukaWords };
 }
 
 migrate.action((args) => {
@@ -65,6 +70,7 @@ start.action(async (args) => {
 
     const logger = new Logger({
         ...data.config,
+        thigukaWords: data.thigukaWordList,
         "cliArgs": data.allArgs
     });
     await logger.init();

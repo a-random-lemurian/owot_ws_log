@@ -1,0 +1,534 @@
+[
+    {
+        "word": "asalisa",
+        "define": "sun"
+    },
+    {
+        "word": "luti",
+        "define": "moon"
+    },
+    {
+        "word": "tubi",
+        "define": "water"
+    },
+    {
+        "word": "salu",
+        "define": "salt"
+    },
+    {
+        "word": "sute",
+        "define": "stone"
+    },
+    {
+        "word": "lufah",
+        "define": "wind"
+    },
+    {
+        "word": "apay",
+        "define": "fire"
+    },
+    {
+        "word": "saro",
+        "define": "current year"
+    },
+    {
+        "word": "leyle",
+        "define": "name"
+    },
+    {
+        "word": "pasla",
+        "define": "place"
+    },
+    {
+        "word": "thil",
+        "define": "thing"
+    },
+    {
+        "word": "lisuti",
+        "define": "window"
+    },
+    {
+        "word": "pelu",
+        "define": "person"
+    },
+    {
+        "word": "rifari",
+        "define": "music"
+    },
+    {
+        "word": "gothi",
+        "define": "fish"
+    },
+    {
+        "word": "aso",
+        "define": "dog"
+    },
+    {
+        "word": "pasa",
+        "define": "cat"
+    },
+    {
+        "word": "fathas",
+        "define": "eye"
+    },
+    {
+        "word": "fothes",
+        "define": "nose"
+    },
+    {
+        "word": "tutho",
+        "define": "tooth"
+    },
+    {
+        "word": "kageta",
+        "define": "tongue/mouth"
+    },
+    {
+        "word": "aysi",
+        "define": "hand"
+    },
+    {
+        "word": "eyla",
+        "define": "ear"
+    },
+    {
+        "word": "arfas",
+        "define": "heart"
+    },
+    {
+        "word": "udag",
+        "define": "brain"
+    },
+    {
+        "word": "doros",
+        "define": "body"
+    },
+    {
+        "word": "kotho",
+        "define": "color"
+    },
+    {
+        "word": "ret",
+        "define": "red"
+    },
+    {
+        "word": "gilis",
+        "define": "green"
+    },
+    {
+        "word": "barau",
+        "define": "brown"
+    },
+    {
+        "word": "elo",
+        "define": "yellow"
+    },
+    {
+        "word": "olate",
+        "define": "orange"
+    },
+    {
+        "word": "parthas",
+        "define": "purple/pink"
+    },
+    {
+        "word": "balaka",
+        "define": "black"
+    },
+    {
+        "word": "pudi",
+        "define": "white"
+    },
+    {
+        "word": "balu",
+        "define": "light blue"
+    },
+    {
+        "word": "sagla",
+        "define": "dark blue"
+    },
+    {
+        "word": "lisa",
+        "define": "woman"
+    },
+    {
+        "word": "toli",
+        "define": "man"
+    },
+    {
+        "word": "laysa",
+        "define": "mother"
+    },
+    {
+        "word": "filaysa",
+        "define": "teen mother"
+    },
+    {
+        "word": "tali",
+        "define": "father"
+    },
+    {
+        "word": "peli",
+        "define": "parent"
+    },
+    {
+        "word": "ritu",
+        "define": "sound"
+    },
+    {
+        "word": "geyle",
+        "define": "game"
+    },
+    {
+        "word": "efete",
+        "define": "event"
+    },
+    {
+        "word": "giled",
+        "define": "guild / faction / group / country"
+    },
+    {
+        "word": "efegukisu efete / \"kisufete\"",
+        "define": "war"
+    },
+    {
+        "word": "sifothi",
+        "define": "story, tale, article (like \"encyclopedia article\", \"Wikipedia article\")"
+    },
+    {
+        "word": "sigupeke sifothi",
+        "define": "fictional story"
+    },
+    {
+        "word": "pesulu",
+        "define": "fan (of a work of fiction)"
+    },
+    {
+        "word": "efekala",
+        "define": "news"
+    },
+    {
+        "word": "gisafi",
+        "define": "desire; to desire or want something"
+    },
+    {
+        "word": "lahfefi (from \"ofegulahfay ofefi\", lit. \"beautiful movement\")",
+        "define": "dance"
+    },
+    {
+        "word": "fahlahfefi",
+        "define": "dancer"
+    },
+    {
+        "word": "kuyri",
+        "define": "choir"
+    },
+    {
+        "word": "fayolil",
+        "define": "violin"
+    },
+    {
+        "word": "fahfayolil",
+        "define": "violinist"
+    },
+    {
+        "word": "pateres",
+        "define": "pattern"
+    },
+    {
+        "word": "arafat",
+        "define": "art"
+    },
+    {
+        "word": "aglad",
+        "define": "book"
+    },
+    {
+        "word": "olota",
+        "define": "honor"
+    },
+    {
+        "word": "thiguolota thil",
+        "define": "award"
+    },
+    {
+        "word": "ralahsa",
+        "define": "internet router"
+    },
+    {
+        "word": "ilasag",
+        "define": "sleep"
+    },
+    {
+        "word": "letahsa",
+        "define": "cup"
+    },
+    {
+        "word": "pakahla",
+        "define": "attention"
+    },
+    {
+        "word": "falasatha",
+        "define": "sadness"
+    },
+    {
+        "word": "kelilasu",
+        "define": "anger"
+    },
+    {
+        "word": "kalafasa",
+        "define": "ballpen"
+    },
+    {
+        "word": "kuralag",
+        "define": "subdivision; gated community"
+    },
+    {
+        "word": "silifata",
+        "define": "city"
+    },
+    {
+        "word": "fisilifata",
+        "define": "town"
+    },
+    {
+        "word": "taysife",
+        "define": "bicycle"
+    },
+    {
+        "word": "itherepasla",
+        "define": "website"
+    },
+    {
+        "word": "kalera",
+        "define": "camera"
+    },
+    {
+        "word": "agsalara",
+        "define": "age"
+    },
+    {
+        "word": "ferose",
+        "define": "iron"
+    },
+    {
+        "word": "kesi",
+        "define": "building"
+    },
+    {
+        "word": "pekulugasag",
+        "define": "moderator (of a website; internet community)"
+    },
+    {
+        "word": "sorefe",
+        "define": "shoulder"
+    },
+    {
+        "word": "suleti",
+        "define": "clothing"
+    },
+    {
+        "word": "talahke",
+        "define": "hot; heat"
+    },
+    {
+        "word": "litalahke",
+        "define": "cold; cool (temperature)"
+    },
+    {
+        "word": "susi",
+        "define": "sushi; keys"
+    },
+    {
+        "word": "laydilay",
+        "define": "daytime"
+    },
+    {
+        "word": "lilaydilay",
+        "define": "nighttime"
+    },
+    {
+        "word": "lilayboro",
+        "define": "night shift; night work"
+    },
+    {
+        "word": "igalari",
+        "define": "important"
+    },
+    {
+        "word": "FIP",
+        "define": "VIP; very important person"
+    },
+    {
+        "word": "rigatalu",
+        "define": "very important person; VIP (Thiguka native translation)"
+    },
+    {
+        "word": "fipelu",
+        "define": "child; kid"
+    },
+    {
+        "word": "balisa / filisa",
+        "define": "daughter"
+    },
+    {
+        "word": "batoli",
+        "define": "son (child); male child"
+    },
+    {
+        "word": "fisipaka",
+        "define": "language (other than Thiguka)"
+    },
+    {
+        "word": "gawralay",
+        "define": "ground; surface"
+    },
+    {
+        "word": "udil",
+        "define": "thought; to think"
+    },
+    {
+        "word": "filasabi",
+        "define": "coffee"
+    },
+    {
+        "word": "filakesi",
+        "define": "cafe"
+    },
+    {
+        "word": "ithesipakala",
+        "define": "voice chat (on the Internet)"
+    },
+    {
+        "word": "itherapakala",
+        "define": "internet forum"
+    },
+    {
+        "word": "pera",
+        "define": "money"
+    },
+    {
+        "word": "parefas",
+        "define": "possibility"
+    },
+    {
+        "word": "palerefas",
+        "define": "warning"
+    },
+    {
+        "word": "lirid",
+        "define": "need; requirement"
+    },
+    {
+        "word": "lahrithi",
+        "define": "musical instrument"
+    },
+    {
+        "word": "berepasla",
+        "define": "birthplace; origin; to originate in (v)"
+    },
+    {
+        "word": "sapara",
+        "define": "kind; genre; class; type"
+    },
+    {
+        "word": "ifigilepelu",
+        "define": "member (of a group)"
+    },
+    {
+        "word": "tayle",
+        "define": "time"
+    },
+    {
+        "word": "sekodo",
+        "define": "second (unit of time)"
+    },
+    {
+        "word": "iluto",
+        "define": "minute"
+    },
+    {
+        "word": "oras",
+        "define": "hour"
+    },
+    {
+        "word": "dilay",
+        "define": "day (24-hour period)"
+    },
+    {
+        "word": "olatha",
+        "define": "month"
+    },
+    {
+        "word": "fasate",
+        "define": "year (previous/future; not current)"
+    },
+    {
+        "word": "fasade",
+        "define": "decade"
+    },
+    {
+        "word": "thasife",
+        "define": "century"
+    },
+    {
+        "word": "kuthifa",
+        "define": "longer than one month (unspecified length)"
+    },
+    {
+        "word": "satayle",
+        "define": "present; current"
+    },
+    {
+        "word": "tatayle",
+        "define": "past"
+    },
+    {
+        "word": "thatayle",
+        "define": "future"
+    },
+    {
+        "word": "furos",
+        "define": "fun"
+    },
+    {
+        "word": "lisure",
+        "define": "leisure; fun activity; thing done for fun (n) / to have fun (v)"
+    },
+    {
+        "word": "saleyfata",
+        "define": "occupation"
+    },
+    {
+        "word": "leyfata",
+        "define": "career"
+    },
+    {
+        "word": "ithere",
+        "define": "internet"
+    },
+    {
+        "word": "palasaro",
+        "define": "anxiety caused by authority figures"
+    },
+    {
+        "word": "ketala",
+        "define": "fear of being banned by a moderator on the Internet while asleep"
+    },
+    {
+        "word": "larakas",
+        "define": "to steal"
+    },
+    {
+        "word": "ofelepe",
+        "define": "physical mail; to mail a letter"
+    },
+    {
+        "word": "ithefelepe",
+        "define": "email; to email someone"
+    },
+    {
+        "word": "asawa",
+        "define": "spouse; husband; wife"
+    }
+]

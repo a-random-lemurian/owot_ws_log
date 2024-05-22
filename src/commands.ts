@@ -102,7 +102,7 @@ function lastseen_optout(ctx: cpr.CommandParserContext) {
 
     ctx.db.lastSeenSetOpt(ctx.message.realUsername!, false);
     ctx.chat(
-          `You have been opted-out of 'ch lastseen'. | `
+        `You have been opted-out of 'ch lastseen'. | `
         + `"Your data gets exposed. You know you are at risk." - OWOT Wiki Privacy Policy`
     );
 }
@@ -120,7 +120,7 @@ function lastseen_optin(ctx: cpr.CommandParserContext) {
 export function commandList(): string {
     let str = `commands (${COMMANDS_LIST.length}): `;
     str += COMMANDS_LIST.map(c => {
-        let str = ``; 
+        let str = ``;
         str += c.name;
         if (c.restrictions
             && cpr.CommandRestriction.TrustedUsersOnly
@@ -169,8 +169,12 @@ function nora(ctx: cpr.CommandParserContext) {
     ctx.chat("Nora Elise Proctor is a Lemurian OWOT user. She is the creator of owot_ws_log, the bot that keeps an eye on you. D9 hates her. On the other side of the fourth wall, he is Lemuria and Nora is just his roleplay name. Shhhh!");
 }
 
+function thiguka_word(ctx: cpr.CommandParserContext) {
+    ctx.chat(ctx.thiguka!.randomEntryText());
+}
+
 function thiguka(ctx: cpr.CommandParserContext) {
-    ctx.chat("Thiguka, a constructed language by Lemuria, is at /thigukalang (though documentation is not complete). As for /thiguka - someone namesniped it. ")
+    ctx.chat("Thiguka, a constructed language by Lemuria, is at /thigukalang (though documentation is not complete). As for /thiguka - someone namesniped it. | GitHub: <https://github.com/thiguka>");
 }
 
 export const COMMANDS_LIST: cpr.Command[] = [
@@ -188,6 +192,16 @@ export const COMMANDS_LIST: cpr.Command[] = [
         func: nora,
         name: "nora",
         helpInfo: "Nora Elise Proctor"
+    },
+    {
+        func: thiguka,
+        name: "thiguka",
+        helpInfo: "The Thiguka language"
+    },
+    {
+        func: thiguka_word,
+        name: "thiguka-word",
+        helpInfo: "Random word"
     },
     {
         func: src,

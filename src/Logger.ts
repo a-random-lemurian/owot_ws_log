@@ -8,6 +8,7 @@ import { config } from "./types/config";
 import { CommandParser } from "./CommandParser";
 import * as glc from "git-last-commit";
 import * as cmds from "./commands";
+import { ThigukaWordProvider } from "./ThigukaWordProvider";
 
 const log = awlog.child({ moduleName: "Logger" });
 
@@ -45,10 +46,15 @@ export class Logger {
         this.cache = {};
         this.db = new ChatDB(cfg.clickhouse);
 
+        console.log(cfg)
+
         this.parser = new CommandParser({
             prefix: 'ch',
             trustedUsers: cfg.trustedUsers,
-            nickname: cfg.nickname || "owot_ws_log"
+            nickname: cfg.nickname || "owot_ws_log",
+            thiguka: new ThigukaWordProvider({
+                words: cfg.thigukaWords
+            })
         });
         cmds.COMMANDS_LIST.forEach(cmd => {
             this.parser.registerCommand(cmd);
