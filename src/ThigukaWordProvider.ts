@@ -21,7 +21,7 @@ export class ThigukaWordProvider {
     }
 
     randomEntry(): ThigukaEntry {
-        const word = this.words[Math.ceil(Math.random() * this.words.length)];
+        const word = this.words[Math.floor(Math.random() * this.words.length)];
         return word;
     }
 
