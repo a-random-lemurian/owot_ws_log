@@ -10,6 +10,7 @@ import * as glc from "git-last-commit";
 import * as cmds from "./commands";
 import { ThigukaWordProvider } from "./ThigukaWordProvider";
 import * as chsize from "./chatMessageCount"
+import * as utilities from "./utilities"
 
 const log = awlog.child({ moduleName: "Logger" });
 
@@ -109,11 +110,12 @@ export class Logger {
         }
 
         this.worlds[world] = new World(world, srg);
-        this.worlds[world].on("disconnected", (name) => {
+        this.worlds[world].on("disconnected", async (name) => {
             if (this.worldReceivingGlobal == name) { 
                 this.worldReceivingGlobal = null;
             }
             this.worlds[world].cleanup();
+            await utilities.sleep(5000)
             this.join(world);
         });
         this.worlds[world].on("message", (dataObj) => {
