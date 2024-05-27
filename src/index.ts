@@ -33,16 +33,16 @@ const migrate = new cmdr.Command("migrate")
 
 root.addCommand(migrate)
 
-function getData(args: any): { allArgs: cmdArgs, config: configType, thigukaWordList: ThigukaEntry[] } {
+function getData(args: any): { allArgs: cmdArgs, config: configType } {
     const allArgs: cmdArgs = { ...args, ...root.opts() }
-    const config: configType = JSON.parse(
+    let config: configType = JSON.parse(
         fs.readFileSync(allArgs.config, { encoding: `utf8` })
     );
-    const thigukaWords = JSON.parse(
+    config.thigukaWords = JSON.parse(
         fs.readFileSync(allArgs.thiguka, { encoding: `utf8` })
     );
 
-    return { allArgs, config, thigukaWordList: thigukaWords };
+    return { allArgs, config };
 }
 
 migrate.action((args) => {
@@ -70,7 +70,6 @@ start.action(async (args) => {
 
     const logger = new Logger({
         ...data.config,
-        thigukaWords: data.thigukaWordList,
         "cliArgs": data.allArgs
     });
     await logger.init();
