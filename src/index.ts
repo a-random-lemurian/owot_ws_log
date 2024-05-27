@@ -6,9 +6,7 @@ import { log as awlog } from "./app_winston";
 import { config as configType } from "./types/config"
 import { cmdArgs } from "./types/cmdArgs";
 import * as fs from "fs";
-import { inspect } from "util";
 import * as mig from "./cli/migrate"
-import { ThigukaEntry } from "./ThigukaWordProvider";
 
 const log = awlog.child({ moduleName: "CLI" });
 

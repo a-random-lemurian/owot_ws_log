@@ -1,5 +1,3 @@
-import * as utf8 from 'utf8';
-
 /*
  * Check strings for invalid surrogate pairs. You can blame Starianna and her
  * spam bots for this entire file. Ugh!

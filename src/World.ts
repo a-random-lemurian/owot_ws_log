@@ -1,5 +1,4 @@
 import * as SOB from "simple-owot-bot";
-import { ChatMessage } from "./types/chatMessage";
 import { PingResult } from "./types/PingResult";
 import { log as awlog } from "./app_winston";
 import { TypedEmitter } from "tiny-typed-emitter";

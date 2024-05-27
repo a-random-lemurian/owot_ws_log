@@ -1,7 +1,5 @@
-import { ChatLocation } from "simple-owot-bot";
 import { ChatDB } from "./Database";
 import { World } from "./World";
-import { WorldMessageData } from "./types/WorldMessageData";
 import { log as awlog } from "./app_winston";
 import { cmdArgs } from "./types/cmdArgs";
 import { config } from "./types/config";
@@ -111,7 +109,7 @@ export class Logger {
 
         this.worlds[world] = new World(world, srg);
         this.worlds[world].on("disconnected", async (name) => {
-            if (this.worldReceivingGlobal == name) { 
+            if (this.worldReceivingGlobal == name) {
                 this.worldReceivingGlobal = null;
             }
             this.worlds[world].cleanup();
