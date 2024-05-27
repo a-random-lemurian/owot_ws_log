@@ -102,7 +102,7 @@ function lastseen_optout(ctx: cpr.CommandParserContext) {
 
     ctx.db.lastSeenSetOpt(ctx.message.realUsername!, false);
     ctx.chat(
-          `You have been opted-out of 'ch lastseen'. | `
+        `You have been opted-out of 'ch lastseen'. | `
         + `"Your data gets exposed. You know you are at risk." - OWOT Wiki Privacy Policy`
     );
 }
@@ -120,7 +120,7 @@ function lastseen_optin(ctx: cpr.CommandParserContext) {
 export function commandList(): string {
     let str = `commands (${COMMANDS_LIST.length}): `;
     str += COMMANDS_LIST.map(c => {
-        let str = ``; 
+        let str = ``;
         str += c.name;
         if (c.restrictions
             && cpr.CommandRestriction.TrustedUsersOnly
@@ -145,16 +145,48 @@ function version(ctx: cpr.CommandParserContext) {
     ctx.chat(str);
 }
 
-function ffdr(ctx: cpr.CommandParserContext) {
-    ctx.chat("<https://www.youtube.com/@FallingForDeadRosesGaming>");
-}
-
 function traceback(ctx: cpr.CommandParserContext) {
     Error.stackTraceLimit = 1000;
     const err = new Error("Not an error, but stacktrace was requested.");
     console.log(err);
     log.info("Requested stacktrace is ready.");
     ctx.chat("Check the console for the stacktrace, Lemuria.")
+}
+
+const startTime = new Date()
+
+function uptime(ctx: cpr.CommandParserContext) {
+    function timeAgo(givenDate: Date): string {
+        const currentDate = new Date();
+        const timeDifference = currentDate.getTime() - givenDate.getTime();
+    
+        const seconds = Math.floor(timeDifference / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const months = Math.floor(days / 30);
+        const years = Math.floor(days / 365);
+    
+        if (years >= 1) {
+            return `${years} years ago`;
+        } else if (months >= 1) {
+            return `${months} months ago`;
+        } else if (days >= 1) {
+            return `${days} days ago`;
+        } else if (hours >= 1) {
+            return `${hours} hours ago`;
+        } else if (minutes >= 1) {
+            return `${minutes} minutes ago`;
+        } else {
+            return `${seconds} seconds ago`;
+        }
+    }
+
+    ctx.chat(`uptime: ${startTime.toISOString()} - ${timeAgo(startTime)}`)
+}
+
+function ffdr(ctx: cpr.CommandParserContext) {
+    ctx.chat("<https://www.youtube.com/@FallingForDeadRosesGaming>");
 }
 
 function src(ctx: cpr.CommandParserContext) {
@@ -167,6 +199,14 @@ function emily(ctx: cpr.CommandParserContext) {
 
 function nora(ctx: cpr.CommandParserContext) {
     ctx.chat("Nora Elise Proctor is a Lemurian OWOT user. She is the creator of owot_ws_log, the bot that keeps an eye on you. D9 hates her. On the other side of the fourth wall, he is Lemuria and Nora is just his roleplay name. Shhhh!");
+}
+
+function thiguka_word(ctx: cpr.CommandParserContext) {
+    ctx.chat(ctx.thiguka!.randomEntryText());
+}
+
+function thiguka(ctx: cpr.CommandParserContext) {
+    ctx.chat("Thiguka, a constructed language by Lemuria, is at /thigukalang (though documentation is not complete). As for /thiguka - someone namesniped it. | GitHub: <https://github.com/thiguka>");
 }
 
 export const COMMANDS_LIST: cpr.Command[] = [
@@ -184,6 +224,16 @@ export const COMMANDS_LIST: cpr.Command[] = [
         func: nora,
         name: "nora",
         helpInfo: "Nora Elise Proctor"
+    },
+    {
+        func: thiguka,
+        name: "thiguka",
+        helpInfo: "The Thiguka language"
+    },
+    {
+        func: thiguka_word,
+        name: "thiguka-word",
+        helpInfo: "Random word"
     },
     {
         func: src,
@@ -233,5 +283,10 @@ export const COMMANDS_LIST: cpr.Command[] = [
         restrictions: [
             cpr.CommandRestriction.TrustedUsersOnly
         ]
+    },
+    {
+        func: uptime,
+        name: "uptime",
+        helpInfo: "How long has the bot been up?"
     }
 ];

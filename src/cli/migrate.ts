@@ -4,7 +4,7 @@
 import * as sqlite3 from "sqlite3";
 import * as cmdr from "commander";
 import { ClickHouseClient } from '@depyronick/clickhouse-client';
-import { initClickHouseClient } from "./Database";
+import { initClickHouseClient } from "../Database";
 
 let s = 0;
 
@@ -70,8 +70,8 @@ create table chat_message (
 );
  */
 
-import { anti_starianna } from "./anti-starianna";
-import { ClickhouseConnDetails } from "./Database";
+import { anti_starianna } from "../anti-starianna";
+import { ClickhouseConnDetails } from "../Database";
 
 function prepare_for_clickhouse(m: OldDataRow) {
     let msg_json: MsgJson = JSON.parse(m.msg_json);

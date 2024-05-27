@@ -1,3 +1,4 @@
+import { ThigukaEntry } from "../ThigukaWordProvider"
 import { cmdArgs } from "./cmdArgs"
 
 export type config = {
@@ -9,6 +10,7 @@ export type config = {
         "password": string
         "database": string
     },
+    "thigukaWords": ThigukaEntry[]
     "debug": boolean,
     "denialMessageRateLimitSeconds": number,
     "cliArgs": cmdArgs,

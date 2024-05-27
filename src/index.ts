@@ -7,18 +7,23 @@ import { config as configType } from "./types/config"
 import { cmdArgs } from "./types/cmdArgs";
 import * as fs from "fs";
 import { inspect } from "util";
-import * as mig from "./migrate"
+import * as mig from "./cli/migrate"
+import { ThigukaEntry } from "./ThigukaWordProvider";
 
 const log = awlog.child({ moduleName: "CLI" });
 
 const root = new cmdr.Command().version('2.0.0')
     .helpCommand("help")
-    .option("-C --config <value>", "Configuration file", "../config.json")
-    .option("-d --debug", "Debug mode, disables database insertion", false)
+    .option("-C, --config <value>", "Configuration file", "../config.json")
+    .option("-d, --debug", "Debug mode", false)
+    ;
 
-const start = new cmdr.Command("start")
+    const start = new cmdr.Command("start")
     .description("Start a bot")
-    .option("--denials <value>", "JSON file to source snarky denials from", "../denials.json");
+    .option("-D, --denials <value>", "JSON file to source snarky denials from", "../denials.json")
+    .option("-N, --no-database", "Do not insert into ClickHouse", true)
+    .option("    --thiguka <value>", "JSON file for Thiguka words", "../thiguka.json")
+;
 
 root.addCommand(start);
 
@@ -30,8 +35,11 @@ root.addCommand(migrate)
 
 function getData(args: any): { allArgs: cmdArgs, config: configType } {
     const allArgs: cmdArgs = { ...args, ...root.opts() }
-    const config: configType = JSON.parse(
+    let config: configType = JSON.parse(
         fs.readFileSync(allArgs.config, { encoding: `utf8` })
+    );
+    config.thigukaWords = JSON.parse(
+        fs.readFileSync(allArgs.thiguka, { encoding: `utf8` })
     );
 
     return { allArgs, config };

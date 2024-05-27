@@ -1,5 +1,9 @@
+import { ThigukaEntry } from "../ThigukaWordProvider"
+
 export type cmdArgs = {
     "denials": string,
     "config": string,
-    "debug": boolean
+    "thiguka": string,
+    "debug": boolean,
+    "database": boolean
 }
