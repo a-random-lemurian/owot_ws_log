@@ -9,6 +9,7 @@ import { CommandParser } from "./CommandParser";
 import * as glc from "git-last-commit";
 import * as cmds from "./commands";
 import { ThigukaWordProvider } from "./ThigukaWordProvider";
+import * as chsize from "./chatMessageCount"
 
 const log = awlog.child({ moduleName: "Logger" });
 
@@ -71,6 +72,7 @@ export class Logger {
 
     async init() {
         await this.db.connect();
+        await chsize.initializeCount(this.db);
         await glc.getLastCommit(async (err, commit) => {
             this.lastCommit = commit;
         });
@@ -117,6 +119,7 @@ export class Logger {
         this.worlds[world].on("message", (dataObj) => {
             if (this.cliArgs.database) {
                 this.db.logMsg(dataObj);
+                chsize.increment();
             }
         });
         this.worlds[world].on("message", (dataObj) => {

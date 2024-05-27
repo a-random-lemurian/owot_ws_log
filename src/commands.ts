@@ -2,27 +2,33 @@ import { log } from "./app_winston";
 import * as cpr from "./CommandParser";
 import { ChatLocation } from "simple-owot-bot";
 import { ChatMessage } from "./types/chatMessage";
+import * as chsize from "./chatMessageCount"
 
 function size(ctx: cpr.CommandParserContext) {
     log.info("User requested chat message count");
 
-    const start = Date.now();
+    function nanosecondsNow() {
+        var hrTime = process.hrtime()
+        return hrTime[0] * 1000000000 + hrTime[1];
+    }
 
-    ctx.db.msgCount((n) => {
-        let str = ``;
+    const start = nanosecondsNow();
+    const startMs = new Date().getTime()
 
-        if (ctx.worldName = '' && ctx.message.location == ChatLocation.Page) {
-            str += `/tell ${ctx.message.id} `;
-        }
+    let n = chsize.getCount();
+    let str = ``;
 
-        const end = Date.now();
-        let latency = end - start;
-        let totalLatency = end - ctx.message.date;
+    if (ctx.worldName = '' && ctx.message.location == ChatLocation.Page) {
+        str += `/tell ${ctx.message.id} `;
+    }
 
-        str += `${n} messages`;
-        str += ` (latency: db ${latency}ms, total ${totalLatency}ms)`
-        ctx.chat(str);
-    });
+    const end = nanosecondsNow();
+    let latency = end - start;
+    let totalLatency = new Date().getTime() - ctx.message.date;
+
+    str += `${n} messages`;
+    str += ` (latency: db ${latency}ns, total ${totalLatency}ms)`
+    ctx.chat(str);
 }
 
 function about(ctx: cpr.CommandParserContext) {
