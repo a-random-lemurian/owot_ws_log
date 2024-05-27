@@ -27,7 +27,7 @@ export class LastSeen {
     }
 
     private hasUser(user: string) {
-        return this.lastMessages.hasUser !== undefined;
+        return Object.keys(this.lastMessages).includes(user)
     }
 
     constructor(cfg: {db: ChatDB}) {
