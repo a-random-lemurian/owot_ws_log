@@ -12,6 +12,8 @@ FROM owot_chat_log.chat_message
 GROUP BY realUsername order by lastseen
 LIMIT 5000;`;
 
+const ALL_CONSENTS = `SELECT * FROM lastseen_optin`;
+
 export class LastSeen {
     private lastMessages: {
         [key: string]: {
@@ -107,10 +109,21 @@ export class LastSeen {
      */
     private fillInUsernames() {
         const data = this.db.client?.query(ALL_LASTSEEN_DATES)
+        const consents = this.db.client?.query(ALL_CONSENTS);
+
+        function findConsent(realUsername: string): boolean {
+            consents?.forEach(consent => {
+                if (consent["realUsername"] == realUsername) {
+                    return consent["optin"]
+                }
+            });
+            return true;
+        }
+
         data?.forEach(async row => {
             const ru: string = row["realUsername"]
             this.lastMessages[ru] = {
-                consent: await this.consent(ru),
+                consent: findConsent(ru),
                 lastRead: new Date(),
                 lastMessageDate: row["lastseen"]
             }
