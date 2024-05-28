@@ -10,10 +10,8 @@ export class LastSeen {
     private lastMessages: {
         [key: string]: {
             consent: boolean,
-            msg?: ChatMessage,
-
-            // The last time a user wa
-            lastRead?: Date,
+            lastMessageDate: Date,
+            lastRead: Date
         }
     }
     private nonExistentUsers: string[];
@@ -44,7 +42,7 @@ export class LastSeen {
             this.nonExistentUsers.filter(e => e !== user)
         }
         if (this.lastMessages[user]) {
-            this.lastMessages[user].lastRead = new Date(msg.date);
+            this.lastMessages[user].lastMessageDate = new Date(msg.date);
         }
     }
 
@@ -71,11 +69,8 @@ export class LastSeen {
     setConsent(user: string, consent: boolean) {
         this.checkCache();
         if (this.hasUser(user)) {
-            this.lastMessages[user] = {
-                consent: consent,
-                lastRead: new Date(),
-                msg: undefined
-            };
+            this.lastMessages[user].consent = consent,
+            this.lastMessages[user].lastRead = new Date()
         }
         this.db.lastSeenSetOpt(user, consent);
     }
