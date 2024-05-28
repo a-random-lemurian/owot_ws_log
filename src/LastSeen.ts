@@ -6,6 +6,12 @@
 import { ChatDB } from "./Database";
 import { ChatMessage } from "./types/chatMessage"
 
+const ALL_LASTSEEN_DATES = `
+SELECT realUsername, max(date) AS lastseen
+FROM owot_chat_log.chat_message
+GROUP BY realUsername order by lastseen
+LIMIT 5000;`;
+
 export class LastSeen {
     private lastMessages: {
         [key: string]: {
@@ -33,6 +39,8 @@ export class LastSeen {
         this.db = cfg.db;
         this.lastMessages = {};
         this.nonExistentUsers = [];
+
+        this.fillInUsernames();
     }
 
     takeInMessage(msg: ChatMessage) {
@@ -93,4 +101,19 @@ export class LastSeen {
         return consent;
     }
 
+    /* Fetch all usernames from the database.
+     *
+     * TODO: limit to first 5000
+     */
+    private fillInUsernames() {
+        const data = this.db.client?.query(ALL_LASTSEEN_DATES)
+        data?.forEach(async row => {
+            const ru: string = row["realUsername"]
+            this.lastMessages[ru] = {
+                consent: await this.consent(ru),
+                lastRead: new Date(),
+                lastMessageDate: row["lastseen"]
+            }
+        })
+    }
 }
