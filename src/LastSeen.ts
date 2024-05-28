@@ -39,9 +39,12 @@ export class LastSeen {
 
     takeInMessage(msg: ChatMessage) {
         if (!msg.realUsername) return;
-        if (this.lastMessages[msg.realUsername]) {
-            this.lastMessages[msg.realUsername].lastRead = new Date();
-            this.lastMessages[msg.realUsername].msg = msg;
+        const user = msg.realUsername
+        if (this.nonExistentUsers.includes(user)) {
+            this.nonExistentUsers.filter(e => e !== user)
+        }
+        if (this.lastMessages[user]) {
+            this.lastMessages[user].lastRead = new Date(msg.date);
         }
     }
 
