@@ -183,6 +183,14 @@ function src(ctx: cpr.CommandParserContext) {
     ctx.chat("I'm open-source and MIT-licensed: <https://github.com/a-random-lemurian/owot_ws_log>");
 }
 
+function gallia(ctx: cpr.CommandParserContext) {
+    ctx.chat("Gallia Kastner, known on Twitch as passagallia, is an American Twitch streamer and violinist based in Los Angeles, California. <https://galliakastnerviolin.com> <https://twitch.tv/passagallia>");
+}
+
+function gahlija(ctx: cpr.CommandParserContext) {
+    ctx.chat("Gahlija Kastla, o passagallia ifil Telits, gulaya tegu-Arika Telitslisa alu fahgahlirithi ifil Los Algeleskala, Kaliforlijakala. <https://galliakastnerviolin.com> <https://twitch.tv/passagallia>");
+}
+
 function emily(ctx: cpr.CommandParserContext) {
     ctx.chat("Emily Anderson is an Alaskan singer-songwriter who lives in Los Angeles: <https://emilyandersonak.com>");
 }
@@ -200,6 +208,16 @@ function thiguka(ctx: cpr.CommandParserContext) {
 }
 
 export const COMMANDS_LIST: cpr.Command[] = [
+    {
+        func: gallia,
+        name: "gallia",
+        helpInfo: "You know who she is."
+    },
+    {
+        func: gahlija,
+        name: "gallia-thiguka",
+        helpInfo: "Kakepah kala pothutay."
+    },
     {
         func: size,
         name: "size",
