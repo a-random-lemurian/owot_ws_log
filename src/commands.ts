@@ -215,7 +215,7 @@ export const COMMANDS_LIST: cpr.Command[] = [
     },
     {
         func: gahlija,
-        name: "gallia-thiguka",
+        name: "gahlija",
         helpInfo: "Kakepah kala pothutay."
     },
     {
