@@ -70,7 +70,7 @@ create table chat_message (
 );
  */
 
-import { anti_starianna } from "../anti-starianna";
+import { anti_starianna } from "../utilities";
 import { ClickhouseConnDetails } from "../Database";
 
 function prepare_for_clickhouse(m: OldDataRow) {
