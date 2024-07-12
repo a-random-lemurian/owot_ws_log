@@ -51,6 +51,7 @@ export class Logger {
         this.parser = new CommandParser({
             prefix: 'ch',
             trustedUsers: cfg.trustedUsers,
+            badUsers: cfg.badUsers,
             nickname: cfg.nickname || "owot_ws_log",
             thiguka: new ThigukaWordProvider({
                 words: cfg.thigukaWords

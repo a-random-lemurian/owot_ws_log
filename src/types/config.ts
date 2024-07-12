@@ -3,7 +3,8 @@ import { cmdArgs } from "./cmdArgs"
 
 export type config = {
     "worlds": string[],
-    "trustedUsers": string[]
+    "trustedUsers": string[],
+    "badUsers": string[],
     "clickhouse": {
         "host": string
         "username": string

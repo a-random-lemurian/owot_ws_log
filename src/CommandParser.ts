@@ -15,7 +15,8 @@ export interface CommandParserContext {
     db: ChatDB,
     lastCommit: glc.Commit | undefined,
     prefix: string,
-    trustedUsers?: string[]
+    trustedUsers?: string[],
+    badUsers?: string[],
     thiguka?: ThigukaWordProvider
 
     chat: (message: string) => void;
@@ -24,6 +25,7 @@ export interface CommandParserContext {
 export interface CommandParserConfiguration {
     prefix: string,
     trustedUsers: string[],
+    badUsers: string[],
     nickname: string,
     thiguka: ThigukaWordProvider
 }
@@ -44,6 +46,7 @@ export class CommandParser {
     commands: { [key: string]: Command };
     prefix: string;
     trustedUsers: string[];
+    badUsers: string[];
     nickname: string;
     thiguka: ThigukaWordProvider;
 
@@ -51,6 +54,7 @@ export class CommandParser {
         this.commands = {};
         this.prefix = cfg.prefix;
         this.trustedUsers = cfg.trustedUsers;
+        this.badUsers = cfg.badUsers;
         this.nickname = cfg.nickname;
         this.thiguka = cfg.thiguka;
     }
@@ -65,6 +69,10 @@ export class CommandParser {
     canRunCommand(cmd: Command, ctx: CommandParserContext) {
         if (!cmd.restrictions) return true;
         if (!ctx.trustedUsers) return false;
+        if (ctx.badUsers!.includes(ctx.message.realUsername!)) {
+            log.warn("Warning: Untrusted user attempted to run a command. Ignoring.");
+            return false;
+        }
         if (CommandRestriction.TrustedUsersOnly in cmd.restrictions) {
             if (ctx.trustedUsers!.includes(ctx.message.realUsername!)) {
                 return true;
