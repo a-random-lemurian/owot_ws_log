@@ -20,7 +20,7 @@ create table chat_message (
     sentByBot Boolean,
     metadataJson JSON,
 )
-ENGINE = MergeTree
+ENGINE = ReplacingMergeTree()
 PARTITION BY toYYYYMM(date)
 ORDER BY (date);
 
