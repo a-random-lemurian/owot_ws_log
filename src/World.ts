@@ -95,6 +95,7 @@ export class World extends TypedEmitter<WorldEvents> {
     reportDisconnect() {
         log.warn(`disconnected from ${this.name}`);
         this.emit('disconnected', this.name);
+        this.cleanup();
     }
 
     /*
@@ -107,5 +108,6 @@ export class World extends TypedEmitter<WorldEvents> {
      */
     cleanup() {
         this.bot.removeAllListeners();
+        this.removeAllListeners();
     }
 }
