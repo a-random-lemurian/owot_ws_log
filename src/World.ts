@@ -1,4 +1,5 @@
 import * as SOB from "simple-owot-bot";
+import { OwotWS } from "./owotchat/OwotWS";
 import { PingResult } from "./types/PingResult";
 import { log as awlog } from "./app_winston";
 import { TypedEmitter } from "tiny-typed-emitter";
@@ -22,7 +23,7 @@ export interface WorldEvents {
 export class World extends TypedEmitter<WorldEvents> {
     name: string;
     mayReceiveGlobal: boolean;
-    bot: SOB.Bot;
+    bot: OwotWS;
 
     constructor(
         name: string,
@@ -31,7 +32,7 @@ export class World extends TypedEmitter<WorldEvents> {
 
         this.name = name;
         this.mayReceiveGlobal = mayReceiveGlobal;
-        this.bot = new SOB.Bot(createOWOTurl(name));
+        this.bot = new OwotWS(createOWOTurl(name));
 
         let i = setInterval(async () => {
             const result = await this.ping();
@@ -108,6 +109,7 @@ export class World extends TypedEmitter<WorldEvents> {
      */
     cleanup() {
         this.bot.removeAllListeners();
+        this.bot.close();
         this.removeAllListeners();
     }
 }
