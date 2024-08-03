@@ -69,10 +69,6 @@ export class CommandParser {
     canRunCommand(cmd: Command, ctx: CommandParserContext) {
         if (!cmd.restrictions) return true;
         if (!ctx.trustedUsers) return false;
-        if (ctx.badUsers!.includes(ctx.message.realUsername!)) {
-            log.warn("Warning: Untrusted user attempted to run a command. Ignoring.");
-            return false;
-        }
         if (CommandRestriction.TrustedUsersOnly in cmd.restrictions) {
             if (ctx.trustedUsers!.includes(ctx.message.realUsername!)) {
                 return true;

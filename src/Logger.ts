@@ -124,6 +124,11 @@ export class Logger {
             }
         });
         this.worlds[world].on("message", (dataObj) => {
+            if (dataObj.message.registered &&
+                this.config.badUsers.includes(dataObj.message.realUsername!)) {
+                log.warn("Warning: Untrusted user attempted to run a command. Ignoring.");
+                return;
+            }
             if (dataObj.message.message.startsWith('ch', 0)) {
                 this.parser.executeCommand({
                     ...dataObj,
