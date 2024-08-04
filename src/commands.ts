@@ -1,42 +1,12 @@
 import { log } from "./app_winston";
 import * as cpr from "./CommandParser";
-import { ChatLocation } from "simple-owot-bot";
-import { ChatMessage } from "./types/chatMessage";
-import * as chsize from "./chatMessageCount"
 
-function size(ctx: cpr.CommandParserContext) {
-    log.info("User requested chat message count");
-
-    function nanosecondsNow() {
-        var hrTime = process.hrtime()
-        return hrTime[0] * 1000000000 + hrTime[1];
-    }
-
-    const start = nanosecondsNow();
-    const startMs = new Date().getTime()
-
-    let n = chsize.getCount();
-    let str = ``;
-
-    if (ctx.worldName = '' && ctx.message.location == ChatLocation.Page) {
-        str += `/tell ${ctx.message.id} `;
-    }
-
-    const end = nanosecondsNow();
-    let latency = end - start;
-    let totalLatency = new Date().getTime() - ctx.message.date;
-
-    str += `${n} messages`;
-    str += ` (latency: db ${latency}ns, total ${totalLatency}ms)`
-    ctx.chat(str);
-}
-
-function about(ctx: cpr.CommandParserContext) {
-    ctx.chat(
-        "owot_ws_log is Lemuria's chat logger. "
-        + "Smile, your message is now in my database!"
-    );
-}
+import { size } from "./chat_cmds/size"
+import { lastseen, lastseen_optin, lastseen_optout } from "./chat_cmds/lastseen"
+import { version } from "./chat_cmds/version";
+import { about } from "./chat_cmds/about";
+import { uptime } from "./chat_cmds/uptime";
+import { traceback } from "./chat_cmds/traceback";
 
 function help(ctx: cpr.CommandParserContext) {
     let str = commandList() + ` / *: Lemuria-only`;
@@ -54,75 +24,6 @@ function help(ctx: cpr.CommandParserContext) {
     ctx.chat(str);
 }
 
-// TODO: cache the optouts in memory, skipping a trip to the DB
-
-const NO_LASTSEEN_FOR_ANONS =
-    `The 'ch lastseen' command does not store data on anonymous users.`;
-
-function isRegistered(message: ChatMessage) {
-    return message.registered;
-}
-
-async function lastseen(ctx: cpr.CommandParserContext) {
-    const start = Date.now();
-
-    if (ctx.args.length === 0) {
-        ctx.chat(`You need to specify an OWOT username to check.`);
-        return;
-    }
-
-    if (ctx.args[0].match(/^\d+$/)) {
-        ctx.chat(NO_LASTSEEN_FOR_ANONS);
-        return;
-    }
-
-    if (!await ctx.db.lastSeenCheckOpt(ctx.args[0]!)) {
-        ctx.chat(`${ctx.args[0]} has opted out of 'ch lastseen'.`);
-        return;
-    }
-
-    const resp = await ctx.db.lastSeen(ctx.args[0]!);
-
-    log.info(JSON.stringify(resp));
-
-    if (resp?.length == 0) {
-        ctx.chat(`${ctx.args[0]} is not in the database.`);
-        return;
-    }
-
-    const end = Date.now();
-    const latency = end - start;
-    const totalLatency = end - ctx.message.date;
-
-    //lsm: [L]ast [s]een [m]essage
-    const lsm: ChatMessage = resp![0];
-    ctx.chat(`${lsm.realUsername} was last seen at ${lsm.date} UTC `
-        + `(latency: db ${latency}ms, total ${totalLatency}ms)`);
-}
-
-function lastseen_optout(ctx: cpr.CommandParserContext) {
-    if (!isRegistered(ctx.message)) {
-        ctx.chat(NO_LASTSEEN_FOR_ANONS + ` You're always opted out.`);
-        return;
-    }
-
-    ctx.db.lastSeenSetOpt(ctx.message.realUsername!, false);
-    ctx.chat(
-        `You have been opted-out of 'ch lastseen'. | `
-        + `"Your data gets exposed. You know you are at risk." - OWOT Wiki Privacy Policy`
-    );
-}
-
-function lastseen_optin(ctx: cpr.CommandParserContext) {
-    if (!isRegistered(ctx.message)) {
-        ctx.chat(NO_LASTSEEN_FOR_ANONS + ` You're always opted in.`);
-        return;
-    }
-
-    ctx.db.lastSeenSetOpt(ctx.message.realUsername!, true);
-    ctx.chat(`You have opted back into 'ch lastseen'.`);
-}
-
 export function commandList(): string {
     let str = `commands (${COMMANDS_LIST.length}): `;
     str += COMMANDS_LIST.map(c => {
@@ -137,42 +38,6 @@ export function commandList(): string {
         return str;
     }).sort().join('').slice(0, -2);
     return str;
-}
-
-function version(ctx: cpr.CommandParserContext) {
-    let str = ``;
-    if (!ctx.lastCommit) {
-        str += `no git version information`
-    } else {
-        str += `${ctx.lastCommit.hash.substring(0, 12)} - date: `;
-        str += `${new Date(parseInt(ctx.lastCommit.authoredOn) * 1000)}`;
-    }
-
-    ctx.chat(str);
-}
-
-function traceback(ctx: cpr.CommandParserContext) {
-    Error.stackTraceLimit = 1000;
-    const err = new Error("Not an error, but stacktrace was requested.");
-    console.log(err);
-    log.info("Requested stacktrace is ready.");
-    ctx.chat("Check the console for the stacktrace, Lemuria.")
-}
-
-const startTime = new Date()
-
-function uptime(ctx: cpr.CommandParserContext) {
-    function durationStr(startDate: Date, endDate: Date) {
-        const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
-        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-    
-        return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }
-
-    ctx.chat(`uptime: ${startTime.toISOString()} - ${durationStr(startTime, new Date())}`)
 }
 
 function ffdr(ctx: cpr.CommandParserContext) {
