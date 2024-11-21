@@ -6,7 +6,7 @@ import { config } from "./types/config";
 import { CommandParser } from "./CommandParser";
 import * as glc from "git-last-commit";
 import * as cmds from "./commands";
-import { ThigukaWordProvider } from "./ThigukaWordProvider";
+import { ThigukaWordProvider } from "./thiguka/ThigukaWordProvider";
 import * as chsize from "./chatMessageCount"
 import * as utilities from "./utilities"
 
