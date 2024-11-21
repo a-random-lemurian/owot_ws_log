@@ -1,4 +1,4 @@
-import { log as awlog } from "./app_winston";
+import { log as awlog } from "../app_winston";
 const log = awlog.child({ moduleName: "ThigukaWordProvider" });
 
 export interface ThigukaEntry {

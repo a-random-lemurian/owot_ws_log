@@ -7,6 +7,7 @@ import { version } from "./chat_cmds/version";
 import { about } from "./chat_cmds/about";
 import { uptime } from "./chat_cmds/uptime";
 import { traceback } from "./chat_cmds/traceback";
+import { thiguka, thiguka_word } from "./chat_cmds/thiguka";
 
 function help(ctx: cpr.CommandParserContext) {
     let str = commandList() + ` / *: Lemuria-only`;
@@ -62,14 +63,6 @@ function emily(ctx: cpr.CommandParserContext) {
 
 function nora(ctx: cpr.CommandParserContext) {
     ctx.chat("Nora Elise Proctor is a Lemurian OWOT user. She is the creator of owot_ws_log, the bot that keeps an eye on you. D9 hates her. On the other side of the fourth wall, he is Lemuria and Nora is just his roleplay name. Shhhh!");
-}
-
-function thiguka_word(ctx: cpr.CommandParserContext) {
-    ctx.chat(ctx.thiguka!.randomEntryText());
-}
-
-function thiguka(ctx: cpr.CommandParserContext) {
-    ctx.chat("Thiguka, a constructed language by Lemuria, is at /thigukalang (though documentation is not complete). As for /thiguka - someone namesniped it. | GitHub: <https://github.com/thiguka>");
 }
 
 export const COMMANDS_LIST: cpr.Command[] = [

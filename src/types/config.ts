@@ -1,4 +1,4 @@
-import { ThigukaEntry } from "../ThigukaWordProvider"
+import { ThigukaEntry } from "../thiguka/ThigukaWordProvider"
 import { cmdArgs } from "./cmdArgs"
 
 export type config = {
