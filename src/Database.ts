@@ -121,4 +121,12 @@ export class ChatDB {
         )
         return rows
     }
+
+    async getDaysMessages(params: {date: Date}) {
+        const dateString = `'${params.date.toISOString().substring(0, 10)}'`;
+        const rows = await this.client?.queryPromise(
+            `select * from chat_message where toDate(date) = ${dateString}`
+        );
+        return rows
+    }
 }

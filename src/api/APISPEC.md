@@ -15,3 +15,11 @@ The `/messages` endpoint returns messages in the database.
 ***Parameters***
 - `query`: The query string to search for in the database.
 - `pageSize`: The number of messages to retrieve from the database. Maximum is 1,000.
+
+### GET /daily_messages
+The `/daily_messages/YEAR/MONTH/DAY` endpoint returns messages sent on a particular day, UTC.
+
+***Path elements***
+- YEAR: The year of the date to look up.
+- MONTH: The month of the date to look up.
+- DAY: The day number within the month of the date to look up.
