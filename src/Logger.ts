@@ -44,7 +44,14 @@ export class Logger {
         this.worldReceivingGlobal = null;
         this.cliArgs = cfg.cliArgs;
         this.cache = {};
-        this.db = new ChatDB(cfg.clickhouse);
+
+        let dbConfig = cfg.clickhouse;
+        if (cfg.cliArgs.debug) {
+            dbConfig.database = "DEBUG_owot_chat_log";
+            log.info("Using debug owot chat log table.");
+        }
+
+        this.db = new ChatDB(dbConfig);
 
         console.log(cfg)
 
