@@ -45,7 +45,7 @@ function createExpressApi(db: ChatDB) {
     })
 
     api.get("/daily_messages/:year/:month/:day", async (req, res) => {
-        const messageDay = new Date(parseInt(req.params.year), parseInt(req.params.month), parseInt(req.params.day))
+        const messageDay = new Date(parseInt(req.params.year), parseInt(req.params.month)-1, parseInt(req.params.day)+1)
         res.status(200).json((await db.getDaysMessages({ date: messageDay })))
     })
 
