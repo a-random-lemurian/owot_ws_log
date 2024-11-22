@@ -6,6 +6,8 @@ export const DEFAULT_API_PORT = 21655
 
 const log = awlog.child({ moduleName: "APIServer" });
 
+const MAXIMUM_MESSAGE_ROWS = 1000;
+
 function createExpressApi(db: ChatDB) {
     const app: Express = express();
     const api = Router();
@@ -19,6 +21,25 @@ function createExpressApi(db: ChatDB) {
         db.msgCount((n)=>{
             res.status(200).json({ messages: n })
         })
+    });
+
+    api.get("/messages", async (req, res) => {
+        const searchTerm = req.query["searchTerm"]?.toString()
+        const params = {
+            query: searchTerm!,
+            pageSize: parseInt(req.query.pageSize?.toString()!) || 100
+        }
+        console.log(params)
+        
+        if (!searchTerm) {
+            res.status(400).json({"error": "searchTerm parameter not specified", "id": "no-search-term"});
+            return
+        }
+        if (params.pageSize > MAXIMUM_MESSAGE_ROWS) {
+            res.status(400).json({"error": "too many rows", "id": "too-many", "maximum": MAXIMUM_MESSAGE_ROWS})
+        }
+    
+        res.status(200).json((await db.searchMessage(params)))
     })
 
     return app

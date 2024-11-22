@@ -111,4 +111,14 @@ export class ChatDB {
                 log.error(inspect(wmd));
             });
     }
+
+    async searchMessage(params: { query: string, pageSize: number }) {
+        const rows = await this.client?.queryPromise(
+            `select * from chat_message where match(message, {query:String}) order by date desc limit ${params.pageSize}`,
+            {
+                query: params.query
+            }
+        )
+        return rows
+    }
 }
