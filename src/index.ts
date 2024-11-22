@@ -44,9 +44,6 @@ function getData(args: any): { allArgs: cmdArgs, config: configType } {
     let config: configType = JSON.parse(
         fs.readFileSync(allArgs.config, { encoding: `utf8` })
     );
-    config.thigukaWords = JSON.parse(
-        fs.readFileSync(allArgs.thiguka, { encoding: `utf8` })
-    );
 
     return { allArgs, config };
 }
@@ -64,6 +61,9 @@ start.action(async (args) => {
     log.info(`ffdr on top`);
 
     const data = getData(args);
+    data.config.thigukaWords = JSON.parse(
+        fs.readFileSync(data.allArgs.thiguka, { encoding: `utf8` })
+    );
 
     log.info(`read config at: ${data.allArgs.config}`);
     log.info(`joining worlds: ${data.config.worlds}`);
