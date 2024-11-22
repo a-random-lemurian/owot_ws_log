@@ -7,6 +7,8 @@ import { config as configType } from "./types/config"
 import { cmdArgs } from "./types/cmdArgs";
 import * as fs from "fs";
 import * as mig from "./cli/migrate"
+import { Server } from "./api/Server"
+import { ChatDB } from "./Database";
 
 const log = awlog.child({ moduleName: "CLI" });
 
@@ -29,7 +31,13 @@ const migrate = new cmdr.Command("migrate")
     .description("Migrate from the old SQLite3 based logger")
     .addArgument(new cmdr.Argument("file", "SQLite3 database file"));
 
-root.addCommand(migrate)
+root.addCommand(migrate);
+
+const apiServer = new cmdr.Command("serve-api")
+    .description("Serve the owot_ws_log API")
+    .option("-p, --port", "Port to run the server on");
+
+root.addCommand(apiServer)
 
 function getData(args: any): { allArgs: cmdArgs, config: configType } {
     const allArgs: cmdArgs = { ...args, ...root.opts() }
@@ -75,6 +83,13 @@ start.action(async (args) => {
     data.config.worlds.forEach(w => {
         logger.join(w);
     })
+})
+
+apiServer.action(async (args)=>{
+    const data = getData(args);
+    console.log(data.allArgs)
+    const server = new Server({...data.allArgs, db: new ChatDB(data.config.clickhouse)});
+    server.start();
 })
 
 root.parse()
