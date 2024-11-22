@@ -1,6 +1,7 @@
-import express, { Express, Router } from "express";
+import express, { Express, Request, Router } from "express";
 import { log as awlog } from "../app_winston";
 import { getCount, initializeCount } from "../chatMessageCount";
+import cors from "cors";
 import { ChatDB } from "../Database";
 export const DEFAULT_API_PORT = 21655
 
@@ -15,6 +16,7 @@ function createExpressApi(db: ChatDB) {
         res.status(200).json({ "message": "The owot ws log server welcomes you. ffdr on top" })
     })
 
+    app.use(cors<Request>({origin:"*"}))
     app.use("/api/v1", api)
 
     api.get("/count", (req, res) => {
