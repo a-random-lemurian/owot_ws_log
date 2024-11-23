@@ -43,8 +43,9 @@ function createExpressApi(db: ChatDB) {
         if (params.pageSize > MAXIMUM_MESSAGE_ROWS) {
             res.status(400).json({"error": "too many rows", "id": "too-many", "maximum": MAXIMUM_MESSAGE_ROWS})
         }
-    
-        res.status(200).json((await db.searchMessage(params)))
+
+        const results = (await db.searchMessage(params))
+        res.status(200).json(results)
     })
 
     api.get("/daily_messages/:year/:month/:day", async (req, res) => {
