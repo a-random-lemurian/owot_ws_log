@@ -3,6 +3,7 @@ import { log as awlog } from "../app_winston";
 import { getCount, initializeCount } from "../chatMessageCount";
 import cors from "cors";
 import { ChatDB } from "../Database";
+import morgan from "morgan";
 import { validateDate } from "./validateDate";
 export const DEFAULT_API_PORT = 21655
 
@@ -19,6 +20,7 @@ function createExpressApi(db: ChatDB) {
 
     app.use(cors<Request>({origin:"*"}))
     app.use("/api/v1", api)
+    api.use(morgan("dev"))
 
     api.get("/count", (req, res) => {
         db.msgCount((n)=>{
