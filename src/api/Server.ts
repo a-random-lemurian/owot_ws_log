@@ -3,6 +3,7 @@ import { log as awlog } from "../app_winston";
 import { getCount, initializeCount } from "../chatMessageCount";
 import cors from "cors";
 import { ChatDB } from "../Database";
+import { validateDate } from "./validateDate";
 export const DEFAULT_API_PORT = 21655
 
 const log = awlog.child({ moduleName: "APIServer" });
@@ -45,8 +46,21 @@ function createExpressApi(db: ChatDB) {
     })
 
     api.get("/daily_messages/:year/:month/:day", async (req, res) => {
-        const messageDay = new Date(parseInt(req.params.year), parseInt(req.params.month)-1, parseInt(req.params.day)+1)
-        res.status(200).json((await db.getDaysMessages({ date: messageDay })))
+
+        const validationResult = validateDate(req.params.year, req.params.month, req.params.day)
+        if (validationResult.hasError) {
+            res.status(validationResult.statusCode).send(validationResult.error);
+            return
+        }
+
+        const messages = (await db.getDaysMessages({ date: validationResult.date! }));
+
+        if (messages?.length === 0) {
+            res.status(404).json({"error": "no messages found", "id": "not-found"});
+            return
+        }
+
+        res.status(200).json(messages)
     })
 
     api.get("/available_days", async (req, res) => {
