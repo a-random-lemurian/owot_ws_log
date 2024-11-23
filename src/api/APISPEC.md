@@ -23,3 +23,10 @@ The `/daily_messages/YEAR/MONTH/DAY` endpoint returns messages sent on a particu
 - YEAR: The year of the date to look up.
 - MONTH: The month of the date to look up.
 - DAY: The day number within the month of the date to look up.
+
+
+
+### GET /available_days
+The `/available_days` endpoint returns per-day message counts. Use this with the `/daily_messages` endpoint to determine which days are available.
+
+*No parameters.*

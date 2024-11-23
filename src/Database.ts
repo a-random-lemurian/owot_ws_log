@@ -129,4 +129,11 @@ export class ChatDB {
         );
         return rows
     }
+
+    async getAvailableDays() {
+        const rows = await this.client?.queryPromise(
+            `select toDate(date) as day, count(*) as messages from owot_chat_log.chat_message group by toDate(date)`
+        )
+        return rows
+    }
 }

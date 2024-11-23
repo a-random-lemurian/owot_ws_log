@@ -49,6 +49,10 @@ function createExpressApi(db: ChatDB) {
         res.status(200).json((await db.getDaysMessages({ date: messageDay })))
     })
 
+    api.get("/available_days", async (req, res) => {
+        res.status(200).json((await db.getAvailableDays()))
+    })
+
     return app
 }
 
