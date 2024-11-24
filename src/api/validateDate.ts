@@ -66,7 +66,7 @@ export function validateDate(yearRaw: string, monthRaw: string, dayRaw: string):
     return {
         hasError: false,
         statusCode: 200,
-        date: new Date(year,month-1,day),
+        date: new Date(year,month-1,day+1),
         error: null
     }
 }
