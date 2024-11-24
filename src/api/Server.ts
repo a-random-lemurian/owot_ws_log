@@ -32,8 +32,19 @@ function createExpressApi(db: ChatDB) {
         const searchTerm = req.query["searchTerm"]?.toString()
         const params = {
             query: searchTerm!,
-            pageSize: parseInt(req.query.pageSize?.toString()!) || 100
+            pageSize: parseInt(req.query.pageSize?.toString()!) || 100,
+            before: ""
         }
+        
+        let beforeDate = new Date()
+        if (req.query["before"]) {
+            let beforeQueryDate = new Date(req.query["before"].toString()!)
+            if (!isNaN(beforeQueryDate.getTime())) {
+                beforeDate = beforeQueryDate
+            }
+        }
+        params.before = beforeDate.toISOString().replace('T', ' ').replace('Z', '')
+        
         console.log(params)
         
         if (!searchTerm) {

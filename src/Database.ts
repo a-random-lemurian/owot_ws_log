@@ -112,12 +112,23 @@ export class ChatDB {
             });
     }
 
-    async searchMessage(params: { query: string, pageSize: number }) {
+    async searchMessage(params: { query: string, pageSize: number, before: string | null}) {
+        // fqp: [f]inal [q]uery [p]arams
+        let fqp = {
+            query: params.query,
+            before: ""
+        }
+
+        let beforeDateClause = "";
+        if (params.before) {
+            beforeDateClause = "and date < toDateTime64({before:String}, 3, 'UTC')",
+            fqp.before = params.before
+        }
+
+
         const rows = await this.client?.queryPromise(
-            `select * from chat_message where match(message, {query:String}) order by date desc limit ${params.pageSize}`,
-            {
-                query: params.query
-            }
+            `select * from chat_message where match(message, {query:String}) ${beforeDateClause} order by date desc limit ${params.pageSize}`,
+            fqp
         )
         return rows
     }
