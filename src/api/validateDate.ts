@@ -8,7 +8,7 @@ export function validateDate(yearRaw: string, monthRaw: string, dayRaw: string):
     } | null
 } {
     const year = parseInt(yearRaw)
-    const month = parseInt(monthRaw) - 1
+    const month = parseInt(monthRaw)
     const day = parseInt(dayRaw)
 
     if ([year, month, day].includes(NaN)) {
@@ -66,7 +66,7 @@ export function validateDate(yearRaw: string, monthRaw: string, dayRaw: string):
     return {
         hasError: false,
         statusCode: 200,
-        date: new Date(year,month,day),
+        date: new Date(year,month-1,day),
         error: null
     }
 }
