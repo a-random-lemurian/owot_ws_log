@@ -10,6 +10,7 @@ export const DEFAULT_API_PORT = 21655
 
 const log = awlog.child({ moduleName: "APIServer" });
 
+const DEFAULT_PAGE_SIZE = 100;
 const MAXIMUM_MESSAGE_ROWS = 1000;
 
 function createExpressApi(db: ChatDB) {
@@ -36,7 +37,7 @@ function createExpressApi(db: ChatDB) {
         const names = req.query["realUsername"]?.toString().split(';') 
         const params = {
             query: searchTerm!,
-            pageSize: parseInt(req.query.pageSize?.toString()!) || 100,
+            pageSize: parseInt(req.query.pageSize?.toString()!) || DEFAULT_PAGE_SIZE,
             before: "",
             realUsername: names || []
         }
