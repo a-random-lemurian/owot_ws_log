@@ -121,9 +121,17 @@ export class ChatDB {
     async searchMessage(params: { query: string, pageSize: number, before: string | null, realUsername: string[]}) {
         // fqp: [f]inal [q]uery [p]arams
         let fqp: FinalQueryParams = {
-            query: params.query,
+            query: "",
             before: "",
         }
+
+        let queryClause = "";
+        if (params.query) {
+            queryClause += " match (message, {query:String}) and "
+            fqp.query = params.query
+            addWhere = true;
+        }
+        fqp.query = queryClause;
 
         let beforeDateClause = "";
         if (params.before) {

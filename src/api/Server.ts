@@ -49,13 +49,7 @@ function createExpressApi(db: ChatDB) {
             }
         }
         params.before = beforeDate.toISOString().replace('T', ' ').replace('Z', '')
-        
-        console.log(params)
-        
-        if (!searchTerm) {
-            res.status(400).json({"error": "searchTerm parameter not specified", "id": "no-search-term"});
-            return
-        }
+
         if (params.pageSize > MAXIMUM_MESSAGE_ROWS) {
             res.status(400).json({"error": "too many rows", "id": "too-many", "maximum": MAXIMUM_MESSAGE_ROWS})
         }
