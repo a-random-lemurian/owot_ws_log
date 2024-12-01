@@ -31,6 +31,12 @@ type chatCountRow = {
     c: string
 }[]
 
+interface FinalQueryParams {
+    query: string;
+    before: string;
+    [key: string]: string;
+}
+
 export class ChatDB {
     client: clickhouse.ClickHouseClient | null;
     credentials: ClickhouseConnDetails;
@@ -114,9 +120,9 @@ export class ChatDB {
 
     async searchMessage(params: { query: string, pageSize: number, before: string | null}) {
         // fqp: [f]inal [q]uery [p]arams
-        let fqp = {
+        let fqp: FinalQueryParams = {
             query: params.query,
-            before: ""
+            before: "",
         }
 
         let beforeDateClause = "";
