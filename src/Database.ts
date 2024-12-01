@@ -133,7 +133,6 @@ export class ChatDB {
             fqp.query = params.query
             addWhere = true;
         }
-        fqp.query = queryClause;
 
         let beforeDateClause = "";
         if (params.before) {
@@ -161,6 +160,8 @@ export class ChatDB {
             ${beforeDateClause}
             ${userClause}
             order by date desc limit ${params.pageSize}`;
+
+        log.info(inspect([query, fqp], {depth: Infinity}))
 
         const rows = await this.client?.queryPromise(
             query,
