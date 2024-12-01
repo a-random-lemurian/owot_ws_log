@@ -16,6 +16,7 @@ The `/messages` endpoint returns messages in the database.
 - `query`: The query string to search for in the database.
 - `pageSize`: The number of messages to retrieve from the database. Maximum is 1,000.
 - `before`: Optional. Used for pagination. The date after which to stop retrieving messages. This is automatically set to the current time of the request internally when the before parameter is not supplied.
+- `realUsername`: Optional. A list of Uvias account usernames whose messages should be queried. Multiple names may be supplied, separated by semicolons, 
 
 ### GET /daily_messages
 The `/daily_messages/YEAR/MONTH/DAY` endpoint returns messages sent on a particular day, UTC.

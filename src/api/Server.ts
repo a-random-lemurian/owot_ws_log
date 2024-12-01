@@ -33,10 +33,12 @@ function createExpressApi(db: ChatDB) {
 
     api.get("/messages", async (req, res) => {
         const searchTerm = req.query["searchTerm"]?.toString()
+        const names = req.query["realUsername"]?.toString().split(';') 
         const params = {
             query: searchTerm!,
             pageSize: parseInt(req.query.pageSize?.toString()!) || 100,
-            before: ""
+            before: "",
+            realUsername: names || []
         }
         
         let beforeDate = new Date()

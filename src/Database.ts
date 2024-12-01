@@ -118,7 +118,7 @@ export class ChatDB {
             });
     }
 
-    async searchMessage(params: { query: string, pageSize: number, before: string | null}) {
+    async searchMessage(params: { query: string, pageSize: number, before: string | null, realUsername: string[]}) {
         // fqp: [f]inal [q]uery [p]arams
         let fqp: FinalQueryParams = {
             query: params.query,
@@ -131,9 +131,26 @@ export class ChatDB {
             fqp.before = params.before
         }
 
+        let userClause = "";
+        if (params.realUsername.length !== 0) {
+            let userIndex = 0;
+            for (const user of params.realUsername) {
+                userClause += (userIndex == 0) ? 'and' : 'or';
+                userClause += `  realUsername = {user${userIndex}:String}`;
+                fqp[`user${userIndex}`] = user;
+                userIndex++;
+            }
+        }
+
+        const query = `
+            select * from chat_message where
+            match(message, {query:String})
+            ${beforeDateClause}
+            ${userClause}
+            order by date desc limit ${params.pageSize}`;
 
         const rows = await this.client?.queryPromise(
-            `select * from chat_message where match(message, {query:String}) ${beforeDateClause} order by date desc limit ${params.pageSize}`,
+            query,
             fqp
         )
         return rows
