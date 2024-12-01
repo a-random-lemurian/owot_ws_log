@@ -118,12 +118,14 @@ export class ChatDB {
             });
     }
 
-    async searchMessage(params: { query: string, pageSize: number, before: string | null, realUsername: string[]}) {
+    async searchMessage(params: { query: string | null, pageSize: number, before: string | null, realUsername: string[]}) {
         // fqp: [f]inal [q]uery [p]arams
         let fqp: FinalQueryParams = {
             query: "",
             before: "",
         }
+
+        let addWhere = false;
 
         let queryClause = "";
         if (params.query) {
@@ -135,8 +137,9 @@ export class ChatDB {
 
         let beforeDateClause = "";
         if (params.before) {
-            beforeDateClause = "and date < toDateTime64({before:String}, 3, 'UTC')",
+            beforeDateClause = " date < toDateTime64({before:String}, 3, 'UTC')",
             fqp.before = params.before
+            addWhere = true;
         }
 
         let userClause = "";
@@ -147,12 +150,14 @@ export class ChatDB {
                 userClause += `  realUsername = {user${userIndex}:String}`;
                 fqp[`user${userIndex}`] = user;
                 userIndex++;
+                addWhere = true;
             }
         }
 
+        
         const query = `
-            select * from chat_message where
-            match(message, {query:String})
+            select * from chat_message ${addWhere ? 'where ' : ''}
+            ${queryClause}
             ${beforeDateClause}
             ${userClause}
             order by date desc limit ${params.pageSize}`;
