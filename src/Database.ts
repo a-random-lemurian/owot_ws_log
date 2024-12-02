@@ -129,7 +129,7 @@ export class ChatDB {
 
         let queryClause = "";
         if (params.query) {
-            queryClause += " match (message, {query:String}) and "
+            queryClause += " match (lower(message), lower({query:String})) and "
             fqp.query = params.query
             addWhere = true;
         }
@@ -146,7 +146,7 @@ export class ChatDB {
             let userIndex = 0;
             for (const user of params.realUsername) {
                 userClause += (userIndex == 0) ? 'and' : 'or';
-                userClause += `  realUsername = {user${userIndex}:String}`;
+                userClause += ` lower(realUsername) = lower({user${userIndex}:String})`;
                 fqp[`user${userIndex}`] = user;
                 userIndex++;
                 addWhere = true;
