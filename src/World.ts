@@ -34,6 +34,18 @@ export class World extends TypedEmitter<WorldEvents> {
         this.mayReceiveGlobal = mayReceiveGlobal;
         this.bot = new OwotWS(createOWOTurl(name));
 
+        let connectionAttempts = 0;
+        while (true) {
+            try {
+                connectionAttempts++
+                log.info(`Connection attempt ${connectionAttempts}`)
+                this.bot.connect()
+                break;
+            } catch (e) {
+                log.error(`Error: ${e}`)
+            }
+        }
+
         let i = setInterval(async () => {
             const result = await this.ping();
             if (!result.connected) {
@@ -83,12 +95,12 @@ export class World extends TypedEmitter<WorldEvents> {
     }
 
     ping(): Promise<PingResult> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.bot.ping().then(n => {
                 resolve({ ms: n, connected: true });
             });
             setTimeout(() => {
-                resolve({ ms: 0, connected: false });
+                reject("ping timeout")
             }, 30000);
         })
     }

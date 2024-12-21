@@ -3,6 +3,8 @@ import * as wslib from "ws";
 import { ChatMessage } from "../types/chatMessage";
 import { MessagePing } from "./messages";
 
+import { log as awlog } from "../app_winston";
+import winston from "winston";
 export interface OwotWSEvents {
     "connected": () => void;
     "disconnected": () => void;
@@ -17,27 +19,16 @@ export enum ChatLocation {
 
 export class OwotWS extends TypedEmitter<OwotWSEvents> {
     ws!: WebSocket;
+    log: winston.Logger
+    url: string | URL
 
     constructor(url: string | URL) {
         super();
-        this.ws = new WebSocket(url);
 
-        this.ws.addEventListener("open", () => {
-            this.emit("connected");
-        });
-        this.ws.addEventListener("close", () => {
-            this.emit("disconnected");
-        })
-
-        this.ws.addEventListener("message", (ev) => {
-            let obj = JSON.parse(ev.data);
-            let kind = obj["kind"];
-
-            if (kind == "chat") { this.handleChat(obj); }
-            if (kind == "ping") { this.handlePing(obj); }
-        });
+        this.url = url
+        this.log = awlog.child({ moduleName: "OwotWS" });
     }
-
+    
     private handleChat(obj: ChatMessage) {
         this.emit("message_chat", obj);
     }
@@ -93,5 +84,32 @@ export class OwotWS extends TypedEmitter<OwotWSEvents> {
      */
     public close() {
         this.ws.close();
+    }
+
+    public connect() {
+        while (true) {
+            try {
+                this.ws = new WebSocket(this.url);
+                this.log.info(`Connecting to ${this.url}`);
+                break;
+            } catch (e) {
+                this.log.error(`Could not connect: ${e}`);
+            }
+        }
+        
+        this.ws.addEventListener("open", () => {
+            this.emit("connected");
+        });
+        this.ws.addEventListener("close", () => {
+            this.emit("disconnected");
+        })
+        
+        this.ws.addEventListener("message", (ev) => {
+            let obj = JSON.parse(ev.data);
+            let kind = obj["kind"];
+            
+            if (kind == "chat") { this.handleChat(obj); }
+            if (kind == "ping") { this.handlePing(obj); }
+        });
     }
 }
