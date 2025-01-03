@@ -25,6 +25,8 @@ export class World extends TypedEmitter<WorldEvents> {
     mayReceiveGlobal: boolean;
     bot: OwotWS;
 
+    pingIntervalId: NodeJS.Timeout;
+
     constructor(
         name: string,
         mayReceiveGlobal: boolean) {
@@ -46,21 +48,26 @@ export class World extends TypedEmitter<WorldEvents> {
             }
         }
 
-        let i = setInterval(async () => {
-            const result = await this.ping();
-            if (!result.connected) {
-                log.warn(`${this.name} - Ping timeout!`);
-                this.reportDisconnect();
-            } else {
-                if (result.ms < 15000) {
-                    return;
+        this.pingIntervalId = setInterval(async () => {
+            try {
+                const result = await this.ping();
+                if (!result.connected) {
+                    log.warn(`${this.name} - Ping timeout!`);
+                    this.reportDisconnect();
+                } else {
+                    if (result.ms < 15000) {
+                        return;
+                    }
+                    log.warn(
+                        `${this.name} - possible weirdness in progress!`
+                        + `server ping: ${result.ms} ms`
+                    );
                 }
-                log.warn(
-                      `${this.name} - possible weirdness in progress!`
-                    + `server ping: ${result.ms} ms`
-                );
+            } catch (error) {
+                log.error(`${this.name} - Ping failed: ${error}`);
+                this.reportDisconnect();
             }
-        }, 60000);
+        }, 60000);        
 
         this.bot.on("connected", () => {
             log.info(`Connected to '${name}'`);
@@ -123,5 +130,6 @@ export class World extends TypedEmitter<WorldEvents> {
         this.bot.removeAllListeners();
         this.bot.close();
         this.removeAllListeners();
+        clearInterval(this.pingIntervalId);
     }
 }
