@@ -87,7 +87,7 @@ export class OwotWS extends TypedEmitter<OwotWSEvents> {
         this.ws.close();
     }
 
-    public connect() {
+    public async connect() {
         while (true) {
             try {
                 this.ws = new WebSocket(this.url);
@@ -96,7 +96,7 @@ export class OwotWS extends TypedEmitter<OwotWSEvents> {
             } catch (e: any) {
                 this.log.error(`Could not connect: ${e}`);
                 this.log.error(`${e!.stack!}`)
-                sleep(500)
+                await sleep(500)
             }
         }
         
