@@ -17,7 +17,7 @@ export function size(ctx: cpr.CommandParserContext) {
     let n = chsize.getCount();
     let str = ``;
 
-    if (ctx.worldName = '' && ctx.message.location == ChatLocation.Page) {
+    if (ctx.worldName == '' && ctx.message.location == ChatLocation.Page) {
         str += `/tell ${ctx.message.id} `;
     }
 
