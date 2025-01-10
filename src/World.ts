@@ -78,17 +78,6 @@ export class World extends TypedEmitter<WorldEvents> {
                 return;
             }
 
-            // Assemble human-readable string to send to output
-            let str: string = '';
-            str += `/${name} : `
-            str += `{${m.location}} `
-            str += `[${m.id}]`;
-            if (m.admin) str += ' (admin)';
-            if (m.registered) str += ` <${m.realUsername}>`;
-            if (m.nickname) str += ` (${m.nickname})`;
-            str += `: ${m.message}`;
-            log.info(str);
-
             // Send message back to the parent Logger
             this.emit('message', {
                 'message': m,
