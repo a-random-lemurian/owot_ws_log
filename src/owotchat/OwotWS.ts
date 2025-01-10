@@ -92,8 +92,9 @@ export class OwotWS extends TypedEmitter<OwotWSEvents> {
                 this.ws = new WebSocket(this.url);
                 this.log.info(`Connecting to ${this.url}`);
                 break;
-            } catch (e) {
+            } catch (e: any) {
                 this.log.error(`Could not connect: ${e}`);
+                this.log.error(`${e!.stack!}`)
             }
         }
         
