@@ -9,6 +9,7 @@ import * as cmds from "./commands";
 import { ThigukaWordProvider } from "./thiguka/ThigukaWordProvider";
 import * as chsize from "./chatMessageCount"
 import * as utilities from "./utilities"
+import { Filter, onionFilter, testStringFilter } from "./Filter";
 
 const log = awlog.child({ moduleName: "Logger" });
 
@@ -29,6 +30,7 @@ export class Logger {
     config: config;
     parser: CommandParser;
     lastCommit?: glc.Commit;
+    filter?: Filter;
     cache: object;
 
     ratelimits: { [key: string]: Ratelimit } = {
@@ -44,6 +46,8 @@ export class Logger {
         this.worldReceivingGlobal = null;
         this.cliArgs = cfg.cliArgs;
         this.cache = {};
+        this.filter = new Filter([onionFilter, testStringFilter]);
+        this.filter.showFilterInformation();
 
         let dbConfig = cfg.clickhouse;
         if (cfg.cliArgs.debug) {
@@ -125,6 +129,24 @@ export class Logger {
             this.join(world);
         });
         this.worlds[world].on("message", (dataObj) => {
+            const results = this.filter?.checkMessage(dataObj.message);
+            if (results?.doNotLog) {
+                log.warn("A message has tripped a filter and will not be logged.");
+                return;
+            }
+
+            const m = dataObj.message;
+            // Assemble human-readable string to send to output
+            let str: string = '';
+            str += `/${dataObj.worldName} : `
+            str += `{${m.location}} `
+            str += `[${m.id}]`;
+            if (m.admin) str += ' (admin)';
+            if (m.registered) str += ` <${m.realUsername}>`;
+            if (m.nickname) str += ` (${m.nickname})`;
+            str += `: ${m.message}`;
+            log.info(str);
+
             if (this.cliArgs.database) {
                 this.db.logMsg(dataObj);
                 chsize.increment();
