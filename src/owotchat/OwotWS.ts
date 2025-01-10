@@ -5,6 +5,7 @@ import { MessagePing } from "./messages";
 
 import { log as awlog } from "../app_winston";
 import winston from "winston";
+import { sleep } from "../utilities";
 export interface OwotWSEvents {
     "connected": () => void;
     "disconnected": () => void;
@@ -95,6 +96,7 @@ export class OwotWS extends TypedEmitter<OwotWSEvents> {
             } catch (e: any) {
                 this.log.error(`Could not connect: ${e}`);
                 this.log.error(`${e!.stack!}`)
+                sleep(500)
             }
         }
         
