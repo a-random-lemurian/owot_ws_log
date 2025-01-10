@@ -9,7 +9,7 @@ import * as cmds from "./commands";
 import { ThigukaWordProvider } from "./thiguka/ThigukaWordProvider";
 import * as chsize from "./chatMessageCount"
 import * as utilities from "./utilities"
-import { Filter, onionFilter, testStringFilter } from "./Filter";
+import { Filter, onionFilter } from "./Filter";
 
 const log = awlog.child({ moduleName: "Logger" });
 
@@ -46,7 +46,7 @@ export class Logger {
         this.worldReceivingGlobal = null;
         this.cliArgs = cfg.cliArgs;
         this.cache = {};
-        this.filter = new Filter([onionFilter, testStringFilter]);
+        this.filter = new Filter([onionFilter]);
         this.filter.showFilterInformation();
 
         let dbConfig = cfg.clickhouse;
